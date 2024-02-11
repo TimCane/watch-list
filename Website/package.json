@@ -6,7 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build-api": "ng b api-client",
+    "generate-api": "node ./projects/api-client/scripts/get-swagger-spec.js && nswag run ./projects/api-client/nswag.json /output:./projects/api-client/src/lib/api-client.service.ts /runtime:Net60",
+    "update-api": "npm run generate-api && npm run build-api"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +26,7 @@
     "zone.js": "~0.12.0"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "^15.2.10",
     "@angular/cli": "~15.2.10",
     "@angular/compiler-cli": "^15.2.0",
     "@types/jasmine": "~4.3.0",
@@ -32,6 +36,8 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
+    "ng-packagr": "^15.2.2",
+    "nswag": "^13.18.2",
     "typescript": "~4.9.4"
   }
 }

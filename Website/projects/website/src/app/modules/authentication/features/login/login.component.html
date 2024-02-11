@@ -1,0 +1,30 @@
+<p-card styleClass="p-4" header="Sign in to your account">
+  <div class="m-0">
+    <form [formGroup]="loginForm" class="flex flex-column gap-4">
+      <div class="flex flex-column gap-2">
+        <label for="email">Email</label>
+        <input pInputText id="email" formc formControlName="email" />
+      </div>
+      <div class="flex flex-column gap-2">
+        <label for="password">Password</label>
+        <p-password
+        styleClass="w-full"
+        inputStyleClass="w-full"
+          id="password"
+          aria-describedby="password-help"
+          formControlName="password"
+          [feedback]="false"
+          [toggleMask]="true"
+        />
+      </div>
+      <p-button styleClass="w-full" label="Login"></p-button>
+      <div class="text-center">
+        <a [routerLink]="['/', 'auth', 'forgot-password']">Forgot password?</a>
+      </div>
+      <div class="text-center">
+        Don't have an account?
+        <a [routerLink]="['/', 'auth', 'register']">Register</a>
+      </div>
+    </form>
+  </div>
+</p-card>

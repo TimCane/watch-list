@@ -49,7 +49,7 @@ void ConfigureServices()
         options.AddPolicy(corsOriginsKey,
             policy =>
             {
-                policy.WithOrigins("http://localhost:4200")
+                policy.WithOrigins("http://localhost:4224")
                     .WithHeaders("*")
                     .WithMethods("*");
             });

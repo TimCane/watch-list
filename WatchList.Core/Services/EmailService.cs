@@ -30,7 +30,11 @@ namespace WatchList.Core.Services
             SendEmail(emailAddress, "FORGOTTEN PASSWORD EMAIL", $"Hi {name}, {Environment.NewLine} Reset your password using the following code: {forgottenPasswordId}");
         }
 
-
+        public void SendEmailAddressConfirmation(string emailAddress, string name, Guid emailVerificationId)
+        {
+            SendEmail(emailAddress, "EMAIL CONFIRMATION CODE", $"Hi {name}, {Environment.NewLine} Verify your email using the following code: {emailVerificationId}");
+        }
+        
         private void SendEmail(string emailAddress, string subject, string body)
         {
             try

@@ -61,7 +61,7 @@ namespace WatchList.Core.Access
             {
                 throw new HttpUnauthorizedException($"Account is '{dbUser.Status}'.");
             }
-            
+
             if (!Cryptography.VerifyHash(password, dbUser.Password, dbUser.PasswordSalt))
             {
                 throw new HttpUnauthorizedException("Invalid Email Address / Password");
@@ -164,7 +164,7 @@ namespace WatchList.Core.Access
             {
                 throw new HttpBadRequestException("Invalid Reset Request");
             }
-            
+
             newPassword = Cryptography.HashString(newPassword, out var salt);
 
             userPrompt.User.Password = newPassword;
@@ -275,6 +275,40 @@ namespace WatchList.Core.Access
             await _userPromptRepository.Update(userPrompt);
 
             return new ConfirmEmailAddressResponse(true);
+        }
+
+        public async Task<RequestEmailAddressConfirmationResponse> RequestEmailAddressConfirmationAsync(RequestEmailAddressConfirmationRequest request)
+        {
+            if (request == null)
+            {
+                throw new HttpBadRequestException("Request is null");
+            }
+
+            if (!Validations.IsValidEmailAddress(request.EmailAddress))
+            {
+                throw new HttpBadRequestException("Email Address isn't valid");
+            }
+            
+            var existingUser = await _userRepository.GetByEmailAddress(request.EmailAddress);
+            if (existingUser == null)
+            {
+                return new RequestEmailAddressConfirmationResponse(true);
+            }
+
+            DbUserPrompt dbUserPrompt = new()
+            {
+                Type = DbUserPromptTypeEnum.EmailVerification
+            };
+            
+
+            existingUser.UserPrompts.Add(dbUserPrompt);
+
+
+            await _userRepository.Update(existingUser);
+
+            _emailService.SendEmailAddressConfirmation(existingUser.EmailAddress, existingUser.Name, dbUserPrompt.Id);
+
+            return new RequestEmailAddressConfirmationResponse(true);
         }
     }
 }

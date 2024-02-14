@@ -1,54 +1,116 @@
-<p-card styleClass="p-4" header="Create an account">
-  <div class="m-0">
-    <form [formGroup]="registerForm" class="flex flex-column gap-4">
-      <div class="flex flex-column gap-2">
-        <label for="name">Name</label>
-        <input pInputText id="name" formc formControlName="name" />
-      </div>
-      <div class="flex flex-column gap-2">
-        <label for="email">Email</label>
-        <input pInputText id="email" formc formControlName="email" />
-      </div>
-      <div class="flex flex-column gap-2">
-        <label for="password">Password</label>
-        <p-password
-          id="password"
-          formControlName="password"
-          [toggleMask]="true"
-          styleClass="w-full"
-          inputStyleClass="w-full"
-        >
-          <ng-template pTemplate="header">
-            <h6>Pick a password</h6>
-          </ng-template>
-          <ng-template pTemplate="footer">
-            <p-divider></p-divider>
-            <p class="mt-2">Suggestions</p>
-            <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
-              <li>At least one lowercase</li>
-              <li>At least one uppercase</li>
-              <li>At least one numeric</li>
-              <li>Minimum 8 characters</li>
-            </ul>
-          </ng-template>
-        </p-password>
-      </div>
-      <div class="flex flex-column gap-2">
-        <label for="password">Confirm password</label>
-        <p-password
-          id="confirm-password"
-          formControlName="confirmPassword"
-          [feedback]="false"
-          [toggleMask]="true"
-          styleClass="w-full"
-          inputStyleClass="w-full"
-        />
-      </div>
-      <p-button styleClass="w-full" label="Create an account"></p-button>
-      <div class="text-center">
-        Already have an account?
-        <a [routerLink]="['/', 'auth', 'login']">Login</a>
-      </div>
-    </form>
-  </div>
-</p-card>
+<div
+  *ngIf="{
+  status: status$ | async,
+  error: error$ | async,
+} as state"
+>
+  <p-card styleClass="p-4" header="Create an account">
+    <div class="m-0">
+      <form [formGroup]="registerForm" #form="ngForm" (ngSubmit)="onRegister()" class="flex flex-column gap-2">
+        <div [ngSwitch]="state.status">
+          <div *ngSwitchCase="'loading'">
+            <div class="flex justify-content-center">
+              <p-progressSpinner></p-progressSpinner>
+            </div>
+          </div>
+          <div *ngSwitchCase="'success'">
+            <div class="flex justify-content-center">YES!!</div>
+          </div>
+          <div *ngSwitchDefault>
+            <div class="flex flex-column gap-2">
+              <div class="flex flex-column gap-2">
+                <label for="name">Name</label>
+                <input pInputText id="name" formControlName="name" />
+                <app-input-error
+                  [form]="form"
+                  [control]="name"
+                ></app-input-error>
+              </div>
+              <div class="flex flex-column gap-2">
+                <label for="emailAddress">Email</label>
+                <input
+                  pInputText
+                  id="emailAddress"
+                  formControlName="emailAddress"
+                />
+                <app-input-error
+                  [form]="form"
+                  [control]="emailAddress"
+                ></app-input-error>
+              </div>
+              <div class="flex flex-column gap-2">
+                <label for="password">Password</label>
+                <p-password
+                  id="password"
+                  formControlName="password"
+                  [toggleMask]="true"
+                  styleClass="w-full"
+                  inputStyleClass="w-full"
+                >
+                  <ng-template pTemplate="header">
+                    <h6>Pick a password</h6>
+                  </ng-template>
+                  <ng-template pTemplate="footer">
+                    <p-divider></p-divider>
+                    <p class="mt-2">Required</p>
+                    <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                      <li [ngClass]="{'text-primary': password?.value?.match('(?=.*[a-z])')}">At least one lowercase</li>
+                      <li [ngClass]="{'text-primary': password?.value?.match('^(?=.*[A-Z])')}">At least one uppercase</li>
+                      <li [ngClass]="{'text-primary': password?.value?.match('(.*[0-9].*)')}">At least one numeric</li>
+                      <li [ngClass]="{'text-primary': password?.value?.match('(?=.*[!@#$%^&*])')}">At least one special character</li>
+                      <li [ngClass]="{'text-primary': password?.value?.match('.{8,}')}">Minimum 8 characters</li>
+                    </ul>
+                  </ng-template>
+                </p-password>
+                <app-input-error
+                  [form]="form"
+                  [control]="password"
+                ></app-input-error>
+              </div>
+              <div class="flex flex-column gap-2">
+                <label for="password">Confirm password</label>
+                <p-password
+                  id="confirm-password"
+                  formControlName="confirmPassword"
+                  [feedback]="false"
+                  [toggleMask]="true"
+                  styleClass="w-full"
+                  inputStyleClass="w-full"
+                />
+                <app-input-error
+                  [form]="form"
+                  [control]="confirmPassword"
+                ></app-input-error>
+                <div
+                  *ngIf="
+    form.errors?.['passwordMismatch'] &&
+    (form.touched || form.dirty) &&
+    (confirmPassword && (confirmPassword.dirty || confirmPassword.touched))
+  "
+                >
+                  Password doesnt match
+                </div>
+              </div>
+              <button
+                pButton
+                styleClass="w-full"
+                label="Create an account"
+              ></button>
+              <div
+                *ngIf="state.status == 'error'"
+                class="flex justify-content-center"
+              >
+                {{ state.error }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center">
+          Already have an account?
+          <a [routerLink]="['/', 'auth', 'login']">Login</a>
+        </div>
+      </form>
+    </div>
+  </p-card>
+</div>

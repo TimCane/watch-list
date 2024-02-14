@@ -1,6 +1,7 @@
 ﻿using WatchList.Core.Models.Requests;
 using WatchList.Core.Models.Responses;
 using WatchList.Core.Models;
+using WatchList.Core.Models.Responses.Interfaces;
 
 namespace WatchList.Core.Access.Interfaces
 {
@@ -14,5 +15,6 @@ namespace WatchList.Core.Access.Interfaces
         Task<CheckPasswordResetResponse> CheckPasswordResetAsync(CheckPasswordResetRequest request);
         Task<RegisterResponse> RegisterAsync(RegisterRequest request);
         Task<ConfirmEmailAddressResponse> ConfirmEmailAddressAsync(ConfirmEmailAddressRequest request);
+        Task<RequestEmailAddressConfirmationResponse> RequestEmailAddressConfirmationAsync(RequestEmailAddressConfirmationRequest request);
     }
 }

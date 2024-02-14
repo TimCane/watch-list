@@ -103,6 +103,19 @@ namespace WatchList.API.Controllers
             return await DoUnauthorisedRequest(request, _users.ConfirmEmailAddressAsync);
         }
 
+        [HttpPost]
+        [Route("request-email-address-confirmation")]
+        [Produces("application/json")]
+        [SwaggerOperation(OperationId = nameof(RequestEmailAddressConfirmation))]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(RequestEmailAddressConfirmationResponse),
+            contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
+            description: "The server was unable to process the request", contentTypes: "text/plain")]
+        public async Task<IActionResult> RequestEmailAddressConfirmation([FromBody] RequestEmailAddressConfirmationRequest request)
+        {
+            return await DoUnauthorisedRequest(request, _users.RequestEmailAddressConfirmationAsync);
+        }
+
         [HttpGet]
         [Authorize]
         [Route("whoami")]

@@ -36,7 +36,8 @@ namespace WatchList.Core.Services
                         ValidateAudience = true,
                         ValidIssuer = _appSettings.JwtIssuer,
                         ValidAudience = _appSettings.JwtAudience,
-                        IssuerSigningKey = securityKey
+                        IssuerSigningKey = securityKey,
+                        
                     }, out securityToken);
             }
             catch
@@ -55,7 +56,8 @@ namespace WatchList.Core.Services
             {
             new Claim(ClaimTypes.Name, $"{user.Name}"),
             new Claim(ClaimTypes.Email, $"{user.EmailAddress}"),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString() ?? string.Empty)
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString() ?? string.Empty),
+            new Claim("iat", DateTimeOffset.Now.ToUnixTimeSeconds().ToString(),ClaimValueTypes.Integer )
         };
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JwtSecret));

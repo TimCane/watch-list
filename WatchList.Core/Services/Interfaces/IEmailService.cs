@@ -8,7 +8,8 @@ namespace WatchList.Core.Services.Interfaces
 {
     public interface IEmailService
     {
-        void SendRegistrationEmail(string dbUserEmailAddress, string dbUserName, Guid id);
-        void SendForgottenPasswordEmail(string dbUserEmailAddress, string dbUserName, Guid id);
+        void SendRegistrationEmail(string emailAddress, string userName, Guid id);
+        void SendForgottenPasswordEmail(string emailAddress, string userName, Guid id);
+        void SendEmailAddressConfirmation(string emailAddress, string userName, Guid id);
     }
 }

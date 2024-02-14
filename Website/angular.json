@@ -92,7 +92,13 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "projects/website/src/environments/environment.ts",
+                  "with": "projects/website/src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -107,6 +113,9 @@
               "browserTarget": "website:build:development"
             }
           },
+          "options": {
+            "port": 4224
+        },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {

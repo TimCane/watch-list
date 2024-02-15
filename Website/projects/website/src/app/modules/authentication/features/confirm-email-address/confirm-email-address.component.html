@@ -1,0 +1,38 @@
+<div
+  *ngIf="{
+  status: status$ | async,
+  error: error$ | async,
+} as state"
+>
+  <p-card styleClass="p-4" header="Email confirmation">
+    <div class="m-0">
+      <form
+        class="flex flex-column gap-2"
+      >
+        <div [ngSwitch]="state.status">
+          <div *ngSwitchCase="'loading'">
+            <div class="flex justify-content-center">
+              <p-progressSpinner></p-progressSpinner>
+            </div>
+          </div>
+          <div *ngSwitchCase="'success'">
+            <div class="flex justify-content-center">
+              <div class="text-center">
+                <p>Your email has been confirmed</p>
+                <a [routerLink]="['/', 'auth', 'login']">Login</a>
+              </div>
+            </div>
+          </div>
+          <div *ngSwitchCase="'error'">
+            <div class="flex justify-content-center">{{ state.error }}</div>
+          </div>
+          <div *ngSwitchCase="'pending'">
+            <div class="text-center">
+                <p>Verifing your email</p>
+              </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </p-card>
+</div>

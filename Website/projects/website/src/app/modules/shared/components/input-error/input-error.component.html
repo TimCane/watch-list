@@ -1,0 +1,16 @@
+<div *ngIf="form && control">
+  <small
+    *ngIf="
+      form.invalid &&
+      form.submitted &&
+      control &&
+      control.invalid &&
+      (control.dirty || control.touched) &&
+      control.errors &&
+      form.errors
+    "
+  >
+    <div *ngIf="control.errors['required']">Required</div>
+    <div *ngIf="control.errors['email']">Invalid Email</div>
+  </small>
+</div>

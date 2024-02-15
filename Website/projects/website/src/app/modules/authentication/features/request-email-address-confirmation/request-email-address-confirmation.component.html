@@ -1,0 +1,52 @@
+<div
+  *ngIf="{
+  status: status$ | async,
+  error: error$ | async,
+} as state"
+>
+  <p-card styleClass="p-4" header="Request email confirmation">
+    <div class="m-0">
+      <form
+        [formGroup]="requestEmailConfirmationForm"
+        #form="ngForm"
+        (ngSubmit)="onRequestEmailConfirmationSubmit()"
+        class="flex flex-column gap-2"
+      >
+        <div [ngSwitch]="state.status">
+          <div *ngSwitchCase="'loading'">
+            <div class="flex justify-content-center">
+              <p-progressSpinner></p-progressSpinner>
+            </div>
+          </div>
+          <div *ngSwitchCase="'success'">
+            <div class="flex justify-content-center">
+              <div class="text-center">
+                Please check your email
+              </div>
+            </div>
+          </div>
+          <div *ngSwitchCase="'error'">
+            <div class="flex justify-content-center">{{ state.error }}</div>
+          </div>
+          <div *ngSwitchCase="'pending'">
+            <div class="flex flex-column gap-2">
+              <div class="flex flex-column gap-2">
+                <label for="email">Email</label>
+                <input
+                  pInputText
+                  id="emailAddress"
+                  formControlName="emailAddress"
+                />
+                <app-input-error
+                  [form]="form"
+                  [control]="emailAddress"
+                ></app-input-error>
+              </div>
+              <button pButton class="w-full" label="Request Confirmation"></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </p-card>
+</div>

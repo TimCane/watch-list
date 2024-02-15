@@ -4,9 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --project=website",
+    "postbuild": "node ./projects/website/scripts/postbuild.js",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build-api": "ng b api-client",
+    "generate-api": "node ./projects/api-client/scripts/get-swagger-spec.js && nswag run ./projects/api-client/nswag.json /output:./projects/api-client/src/lib/api-client.service.ts /runtime:Net60",
+    "update-api": "npm run generate-api && npm run build-api"
   },
   "private": true,
   "dependencies": {
@@ -18,11 +22,19 @@
     "@angular/platform-browser": "^15.2.0",
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
+    "@ngrx/effects": "^15.4.0",
+    "@ngrx/entity": "^15.4.0",
+    "@ngrx/router-store": "^15.4.0",
+    "@ngrx/store": "^15.4.0",
+    "@ngrx/store-devtools": "^15.4.0",
+    "primeflex": "^3.3.1",
+    "primeng": "^15.4.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "^15.2.10",
     "@angular/cli": "~15.2.10",
     "@angular/compiler-cli": "^15.2.0",
     "@types/jasmine": "~4.3.0",
@@ -32,6 +44,10 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
-    "typescript": "~4.9.4"
+    "ng-packagr": "^15.2.2",
+    "nswag": "^13.18.2",
+    "purgecss": "^5.0.0",
+    "typescript": "~4.9.4",
+    "webpack-bundle-analyzer": "^4.10.1"
   }
 }

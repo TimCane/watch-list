@@ -19,7 +19,7 @@ namespace WatchList.API.Middleware
             _mapper = mapper;
         }
 
-        public async Task Invoke(HttpContext context, IUserRepository userRepository, ITokenService tokenService)
+        public async Task Invoke(HttpContext context, IUserRepository userRepository, IUserTokenRepository userTokenRepository, ITokenService tokenService)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
@@ -27,15 +27,19 @@ namespace WatchList.API.Middleware
             {
                 if (tokenService.IsTokenValid(token, out var validatedToken))
                 {
-                    var strId = validatedToken?.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                    var strUserId = validatedToken?.Claims.First(x => x.Type == "sub").Value;
+                    var strTokenId = validatedToken?.Claims.First(x => x.Type == "id").Value;
 
-                    if (!string.IsNullOrWhiteSpace(strId) && Guid.TryParse(strId, out var id))
+                    if (!string.IsNullOrWhiteSpace(strUserId) && Guid.TryParse(strUserId, out var userId) &&
+                        !string.IsNullOrWhiteSpace(strTokenId) && Guid.TryParse(strTokenId, out var tokenId))
                     {
-                        var dbUser = await userRepository.GetById(id);
+                        var dbUser = await userRepository.GetById(userId);
+                        var dbUserToken = await userTokenRepository.GetValidUserToken(userId, tokenId);
 
-                        if (dbUser != null && dbUser.CanSignIn())
+                        if (dbUserToken != null && dbUser != null && dbUser.CanSignIn(out _))
                         {
                             var user = _mapper.Map<User>(dbUser);
+                            user.SetTokenId(tokenId);
                             context.Items[ContextKey] = user;
                         }
                     }

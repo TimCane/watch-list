@@ -34,7 +34,12 @@ namespace WatchList.Core.Services
         {
             SendEmail(emailAddress, "EMAIL CONFIRMATION CODE", $"Hi {name}, {Environment.NewLine} Verify your email using the following code: {emailVerificationId}");
         }
-        
+
+        public void SendEmailAddressAlreadyConfirmation(string emailAddress, string name)
+        {
+            SendEmail(emailAddress, "Your email is already verified", $"Hi {name}, {Environment.NewLine} Your email has already been verified");
+        }
+
         private void SendEmail(string emailAddress, string subject, string body)
         {
             try

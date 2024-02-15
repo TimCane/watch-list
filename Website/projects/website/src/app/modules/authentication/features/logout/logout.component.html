@@ -1,1 +1,38 @@
-<p>logout works!</p>
+<div
+  *ngIf="{
+  status: status$ | async,
+  error: error$ | async,
+} as state"
+>
+  <p-card styleClass="p-4" header="Logging you out">
+    <div class="m-0">
+      <form
+        class="flex flex-column gap-2"
+      >
+        <div [ngSwitch]="state.status">
+          <div *ngSwitchCase="'loading'">
+            <div class="flex justify-content-center">
+              <p-progressSpinner></p-progressSpinner>
+            </div>
+          </div>
+          <div *ngSwitchCase="'success'">
+            <div class="flex justify-content-center">
+              <div class="text-center">
+                <p>You have been logged out</p>
+                <a [routerLink]="['/', 'auth', 'login']">Login</a>
+              </div>
+            </div>
+          </div>
+          <div *ngSwitchCase="'error'">
+            <div class="flex justify-content-center">{{ state.error }}</div>
+          </div>
+          <div *ngSwitchCase="'pending'">
+            <div class="text-center">
+                <p>Logging you out</p>
+              </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </p-card>
+</div>

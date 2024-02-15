@@ -9,14 +9,22 @@ import {
   loadConfirmEmailAddressPage,
   loadForgotPasswordPage,
   loadLoginPage,
+  loadLogoutPage,
   loadRegisterPage,
+  loadRequestEmailAddressConfirmationPage,
   loadResetPasswordPage,
   login,
   loginFailure,
   loginSuccess,
+  logout,
+  logoutFailure,
+  logoutSuccess,
   register,
   registerFailure,
   registerSuccess,
+  requestEmailAddressConfirmation,
+  requestEmailAddressConfirmationFailure,
+  requestEmailAddressConfirmationSuccess,
   resetPassword,
   resetPasswordFailure,
   resetPasswordSuccess,
@@ -151,6 +159,59 @@ export const authenticationReducer = createReducer<AuthenticationState>(
   })),
 
   on(confirmEmailAddressFailure, (state, { error }) => ({
+    ...state,
+    error: error,
+    status: 'error',
+  })),
+  //#endregion
+
+  //#region Request Email Address Confirmation
+  on(loadRequestEmailAddressConfirmationPage, (state) => ({
+    ...state,
+    error: '',
+    status: 'pending',
+  })),
+
+  on(requestEmailAddressConfirmation, (state) => ({
+    ...state,
+    status: 'loading',
+  })),
+
+  on(requestEmailAddressConfirmationSuccess, (state, { success }) => ({
+    ...state,
+    error: success ? null : 'There was an error, please try again later.',
+    status: success ? 'success' : 'error',
+  })),
+
+  on(requestEmailAddressConfirmationFailure, (state, { error }) => ({
+    ...state,
+    error: error,
+    status: 'error',
+  })),
+  //#endregion
+
+  //#region Logout
+  on(loadLogoutPage, (state) => ({
+    ...state,
+    error: '',
+    status: 'pending',
+  })),
+
+  on(logout, (state) => ({
+    ...state,
+    user: null,
+    bearerToken: null,
+    refreshToken: null,
+    status: 'loading',
+  })),
+
+  on(logoutSuccess, (state, { success }) => ({
+    ...state,
+    error: success ? null : 'There was an error, please try again later.',
+    status: success ? 'success' : 'error',
+  })),
+
+  on(logoutFailure, (state, { error }) => ({
     ...state,
     error: error,
     status: 'error',

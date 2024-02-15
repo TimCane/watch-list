@@ -37,6 +37,12 @@ namespace WatchList.Core.Data.Repositories
             return Context.SaveChangesAsync();
         }
 
+        public Task RemoveRange(IEnumerable<TEntity> entities)
+        {
+            Context.Set<TEntity>().RemoveRange(entities);
+            return Context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<TEntity>> GetAll()
         {
             return await Context.Set<TEntity>().ToListAsync();

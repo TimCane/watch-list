@@ -128,5 +128,31 @@ namespace WatchList.API.Controllers
         {
             return await DoRequest(_users.WhoAmIAsync);
         }
+
+        [HttpPost]
+        [Authorize]
+        [Route("logout")]
+        [Produces("application/json")]
+        [SwaggerOperation(OperationId = nameof(Logout))]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(LogoutResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
+            description: "The server was unable to process the request", contentTypes: "text/plain")]
+        public async Task<IActionResult> Logout()
+        {
+            return await DoRequest(_users.LogoutAsync);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("force-logout")]
+        [Produces("application/json")]
+        [SwaggerOperation(OperationId = nameof(ForceLogout))]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(ForceLogoutResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
+            description: "The server was unable to process the request", contentTypes: "text/plain")]
+        public async Task<IActionResult> ForceLogout()
+        {
+            return await DoRequest(_users.ForceLogoutAsync);
+        }
     }
 }

@@ -89,6 +89,11 @@ namespace WatchList.API.Controllers
                 _logger.LogInformation("Unauthorized: {e.Message}", e.Message);
                 return Unauthorized(e.Message);
             }
+            catch (HttpInternalServerErrorException e)
+            {
+                _logger.LogInformation("Internal Server Error: {e.Message}", e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
             catch (Exception e)
             {
                 _logger.LogError("Problem: {e.Message}", e.Message);

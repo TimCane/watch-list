@@ -16,5 +16,7 @@ namespace WatchList.Core.Access.Interfaces
         Task<RegisterResponse> RegisterAsync(RegisterRequest request);
         Task<ConfirmEmailAddressResponse> ConfirmEmailAddressAsync(ConfirmEmailAddressRequest request);
         Task<RequestEmailAddressConfirmationResponse> RequestEmailAddressConfirmationAsync(RequestEmailAddressConfirmationRequest request);
+        Task<LogoutResponse> LogoutAsync(User user);
+        Task<ForceLogoutResponse> ForceLogoutAsync(User user);
     }
 }

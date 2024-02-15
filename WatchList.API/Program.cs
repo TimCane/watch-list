@@ -34,13 +34,14 @@ void ConfigureServices()
         Scoped objects are the same within a request, but different across different requests.
         Singleton objects are the same for every object and every request.
      */
-
+    services.AddHostedService<TokenInvalidatorService>();
     services.AddTransient<ITokenService, TokenService>();
     services.AddTransient<IEmailService, EmailService>();
 
     services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<IUserPromptRepository, UserPromptRepository>();
+    services.AddScoped<IUserTokenRepository, UserTokenRepository>();
 
     services.AddScoped<IUsers, Users>();
 
@@ -147,6 +148,7 @@ void ConfigureApp()
             Id = new Guid("4081aaed-9ac8-4a3b-9fda-08da53098d50"),
             EmailAddress = "tim@watch-list.com",
             Name = "Tim",
+            PasswordAttempts = 0,
             Password = "6LaWQkPDI1473yabhnmI7+Wmm4PZF/XVoQ2AGKo07NlVv7Zy4tMcqeVbg86z4VCtbpLGBscyjuZo53kHivnck/DhbfTux1CozF+mjFlHxeibrD1NWabyToqGEaKfPSRzPgW95u6fC99pXOVkvE9bauI676yYkWlh6GxbzHDjJ/KjqOjV+TvmWp2W/zHwz7BasDQ/QbzSWX2eGmaZR6x3U70Xycbs33TNE8xqsx2gbCx8pt4z931nsjXAh5FgO4/ZYWwEeq+xCMMGWX18w8TDGA9Brpk3g44B3R8mdHiTbKNuyuvpTu2bnYyxu2zLbmBEIIXwk564jyGnlzU0bmidig==",
             PasswordSalt = "Ut0cFgpT1f7VZn75PlLIeut05KBKRsVq3RUACSgnkZxq2HTTgZc36a9q5UzaKjMYWmCM7Yzjtc6s5lZz+7IRmHfG1I2wJuItW7U70p4rxBfF/1sopJXrf2gAnY98DXPxDyZEpg3pKq+JJ/NCO00BPHEEBC0y8ITPLP/jBXsGyKk=",
             Status = DbUserStatusTypeEnum.Active,

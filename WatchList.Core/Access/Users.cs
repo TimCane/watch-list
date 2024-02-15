@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using WatchList.Core.Access.Interfaces;
+using WatchList.Core.Constants;
 using WatchList.Core.Data.Entities.Enums;
 using WatchList.Core.Data.Entities;
 using WatchList.Core.Data.Repositories.Interfaces;
@@ -10,6 +11,7 @@ using WatchList.Core.Models.Responses;
 using WatchList.Core.Models;
 using WatchList.Core.Services.Interfaces;
 using WatchList.Core.Utils;
+using Azure.Core;
 
 namespace WatchList.Core.Access
 {
@@ -18,17 +20,22 @@ namespace WatchList.Core.Access
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
+
+
+        private readonly IUserTokenRepository _userTokenRepository;
         private readonly IUserPromptRepository _userPromptRepository;
         private readonly IUserRepository _userRepository;
 
         public Users(ITokenService tokenService, IEmailService emailService, IUserRepository userRepository,
-            IUserPromptRepository userPromptRepository, IMapper mapper)
+            IUserPromptRepository userPromptRepository, IUserTokenRepository userTokenRepository, IMapper mapper)
         {
             _tokenService = tokenService;
             _emailService = emailService;
+            _mapper = mapper;
+
             _userRepository = userRepository;
             _userPromptRepository = userPromptRepository;
-            _mapper = mapper;
+            _userTokenRepository = userTokenRepository;
         }
 
         public async Task<AuthenticateResponse> AuthenticateAsync(AuthenticateRequest? request)
@@ -37,42 +44,79 @@ namespace WatchList.Core.Access
             {
                 throw new HttpBadRequestException("Request is null");
             }
-
-            var emailAddress = request.EmailAddress;
-            var password = request.Password;
-
-            if (string.IsNullOrEmpty(emailAddress) || string.IsNullOrEmpty(password))
+            
+            if (string.IsNullOrEmpty(request.EmailAddress) || string.IsNullOrEmpty(request.Password))
             {
                 throw new HttpBadRequestException("Email Address or password not supplied");
             }
 
-            if (!Validations.IsValidEmailAddress(emailAddress))
+            if (!Validations.IsValidEmailAddress(request.EmailAddress))
             {
                 throw new HttpBadRequestException("Email Address isn't valid");
             }
 
-            var dbUser = await _userRepository.GetByEmailAddress(emailAddress);
+            var dbUser = await _userRepository.GetByEmailAddress(request.EmailAddress);
             if (dbUser == null)
             {
                 throw new HttpUnauthorizedException("Invalid Email Address / Password");
             }
 
-            if (!dbUser.CanSignIn())
+            if (dbUser.PasswordAttempts >= AuthenticationConstants.MaxPasswordAttempts)
             {
-                throw new HttpUnauthorizedException($"Account is '{dbUser.Status}'.");
-            }
-
-            if (!Cryptography.VerifyHash(password, dbUser.Password, dbUser.PasswordSalt))
-            {
+                await IncrementPasswordAttempt(dbUser, true);
                 throw new HttpUnauthorizedException("Invalid Email Address / Password");
             }
 
+            if (!Cryptography.VerifyHash(request.Password, dbUser.Password, dbUser.PasswordSalt))
+            {
+                await IncrementPasswordAttempt(dbUser);
+                throw new HttpUnauthorizedException("Invalid Email Address / Password");
+            }
+
+            if (!dbUser.CanSignIn(out var message))
+            {
+                throw new HttpUnauthorizedException(message);
+            }
+
+            dbUser.PasswordAttempts = 0;
+            await _userRepository.Update(dbUser);
+
             var user = _mapper.Map<User>(dbUser);
 
-            var bearerToken = _tokenService.BuildToken(user);
-            var refreshToken = _tokenService.BuildRefreshToken(user);
+            try
+            {
+                var newTokenId = Guid.NewGuid();
+                var bearerToken = _tokenService.BuildToken(user, newTokenId);
+                var refreshToken = _tokenService.BuildRefreshToken(user, newTokenId);
 
-            return new AuthenticateResponse(bearerToken, refreshToken);
+                await _userTokenRepository.Add(new DbUserToken()
+                {
+                    Id = newTokenId,
+                    User = dbUser
+                });
+
+                return new AuthenticateResponse(bearerToken, refreshToken);
+            }
+            catch (TokenGenerationException e)
+            {
+                throw new HttpInternalServerErrorException(e.Message);
+            }
+
+        }
+
+        private async Task IncrementPasswordAttempt(DbUser dbUser, bool lockUser = false)
+        {
+            Random r = new Random();
+            var range = (1.0 + dbUser.PasswordAttempts * 0.1) * 1000;
+            Thread.Sleep(Convert.ToInt32(r.NextDouble() * range));
+
+            if (lockUser)
+            {
+                dbUser.Status = DbUserStatusTypeEnum.Locked;
+            }
+
+            dbUser.PasswordAttempts++;
+            await _userRepository.Update(dbUser);
         }
 
         public async Task<ReauthenticateResponse> ReauthenticateAsync(ReauthenticateRequest? request)
@@ -87,7 +131,7 @@ namespace WatchList.Core.Access
                 throw new HttpBadRequestException("Refresh Token not supplied");
             }
 
-            var userId = _tokenService.DecryptRefreshToken(request.RefreshToken);
+            var userId = _tokenService.DecryptRefreshToken(request.RefreshToken, out Guid previousTokenId);
 
             var dbUser = await _userRepository.GetById(userId);
             if (dbUser == null)
@@ -95,18 +139,42 @@ namespace WatchList.Core.Access
                 throw new HttpUnauthorizedException("Invalid User");
             }
 
+            var userToken = await _userTokenRepository.GetValidUserToken(userId, previousTokenId);
+            if (userToken == null)
+            {
+                throw new HttpUnauthorizedException("Token invalid");
+            }
+
             var user = _mapper.Map<User>(dbUser);
 
-            var bearerToken = _tokenService.BuildToken(user);
-            var refreshToken = _tokenService.BuildRefreshToken(user);
-            return new ReauthenticateResponse(bearerToken, refreshToken);
+            try
+            {
+                var newTokenId = Guid.NewGuid();
+
+                var bearerToken = _tokenService.BuildToken(user, newTokenId);
+                var refreshToken = _tokenService.BuildRefreshToken(user, newTokenId);
+
+                await _userTokenRepository.Add(new DbUserToken()
+                {
+                    Id = newTokenId,
+                    User = dbUser
+                });
+
+                await _userTokenRepository.Remove(userToken);
+
+                return new ReauthenticateResponse(bearerToken, refreshToken);
+            }
+            catch (TokenGenerationException e)
+            {
+                throw new HttpInternalServerErrorException(e.Message);
+            }
         }
 
         public async Task<WhoAmIResponse> WhoAmIAsync(User user)
         {
             return await Task.Run(() => new WhoAmIResponse(user));
         }
-
+        
         public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordRequest request)
         {
             if (request == null)
@@ -114,18 +182,17 @@ namespace WatchList.Core.Access
                 throw new HttpBadRequestException("Request is null");
             }
 
-            var emailAddress = request.EmailAddress;
-            if (string.IsNullOrEmpty(emailAddress))
+            if (string.IsNullOrEmpty(request.EmailAddress))
             {
                 throw new HttpBadRequestException("Email Address not supplied");
             }
 
-            if (!Validations.IsValidEmailAddress(emailAddress))
+            if (!Validations.IsValidEmailAddress(request.EmailAddress))
             {
                 throw new HttpBadRequestException("Email Address isn't valid");
             }
 
-            var dbUser = await _userRepository.GetByEmailAddress(emailAddress);
+            var dbUser = await _userRepository.GetByEmailAddress(request.EmailAddress);
             if (dbUser == null)
             {
                 return new ForgotPasswordResponse(true);
@@ -134,11 +201,12 @@ namespace WatchList.Core.Access
             var dbUserPrompt = new DbUserPrompt
             {
                 Type = DbUserPromptTypeEnum.PasswordReset,
-                User = dbUser
+                User = dbUser,
+                Status = DbUserPromptStatusEnum.Pending
             };
-
+            
             await _userPromptRepository.Add(dbUserPrompt);
-
+            
             _emailService.SendForgottenPasswordEmail(dbUser.EmailAddress, dbUser.Name, dbUserPrompt.Id);
 
             return new ForgotPasswordResponse(true);
@@ -169,7 +237,10 @@ namespace WatchList.Core.Access
 
             userPrompt.User.Password = newPassword;
             userPrompt.User.PasswordSalt = salt;
-            userPrompt.Used = true;
+            userPrompt.User.PasswordAttempts = 0;
+            userPrompt.User.Status = DbUserStatusTypeEnum.Active;
+            userPrompt.User.UserTokens.Clear();
+            userPrompt.Status = DbUserPromptStatusEnum.Used;
 
             await _userPromptRepository.Update(userPrompt);
 
@@ -201,6 +272,11 @@ namespace WatchList.Core.Access
                 throw new HttpBadRequestException("Request is null");
             }
 
+            if (string.IsNullOrEmpty(request.EmailAddress))
+            {
+                throw new HttpBadRequestException("Email Address not supplied");
+            }
+
             if (!Validations.IsValidEmailAddress(request.EmailAddress))
             {
                 throw new HttpBadRequestException("Email Address isn't valid");
@@ -230,11 +306,12 @@ namespace WatchList.Core.Access
                 Password = password,
                 PasswordSalt = salt,
                 Name = request.Name ?? "",
+                PasswordAttempts = 0,
                 Status = DbUserStatusTypeEnum.RequiresEmailVerification,
                 UserPrompts = new List<DbUserPrompt>
-            {
-                dbUserPrompt
-            },
+                {
+                    dbUserPrompt
+                },
             };
 
             await _userRepository.Add(dbUser);
@@ -266,11 +343,11 @@ namespace WatchList.Core.Access
 
             if (userPrompt.User.Status != DbUserStatusTypeEnum.RequiresEmailVerification)
             {
-                throw new HttpBadRequestException("User doesnt require email verification");
+                throw new HttpBadRequestException("User doesn't require email verification");
             }
 
             userPrompt.User.Status = DbUserStatusTypeEnum.Active;
-            userPrompt.Used = true;
+            userPrompt.Status = DbUserPromptStatusEnum.Used;
 
             await _userPromptRepository.Update(userPrompt);
 
@@ -284,31 +361,97 @@ namespace WatchList.Core.Access
                 throw new HttpBadRequestException("Request is null");
             }
 
+            if (string.IsNullOrEmpty(request.EmailAddress))
+            {
+                throw new HttpBadRequestException("Email Address not supplied");
+            }
+
             if (!Validations.IsValidEmailAddress(request.EmailAddress))
             {
                 throw new HttpBadRequestException("Email Address isn't valid");
             }
             
             var existingUser = await _userRepository.GetByEmailAddress(request.EmailAddress);
-            if (existingUser == null)
+            switch (existingUser)
             {
-                return new RequestEmailAddressConfirmationResponse(true);
+                case null:
+                {
+                    // Cant find user.
+                    return new RequestEmailAddressConfirmationResponse(true);
+                }
+                case {Status: DbUserStatusTypeEnum.Disabled} or { Status: DbUserStatusTypeEnum.Locked }:
+                {
+                    // Cant, user disabled or locked.
+                    return new RequestEmailAddressConfirmationResponse(true);
+                }
+                case {Status: DbUserStatusTypeEnum.Active}:
+                {
+                    // User has already verified email.
+                    _emailService.SendEmailAddressAlreadyConfirmation(existingUser.EmailAddress, existingUser.Name);
+                    return new RequestEmailAddressConfirmationResponse(true);
+                }
             }
 
             DbUserPrompt dbUserPrompt = new()
             {
-                Type = DbUserPromptTypeEnum.EmailVerification
+                Type = DbUserPromptTypeEnum.EmailVerification,
+                Status = DbUserPromptStatusEnum.Pending,
             };
-            
 
             existingUser.UserPrompts.Add(dbUserPrompt);
-
-
+            
             await _userRepository.Update(existingUser);
 
             _emailService.SendEmailAddressConfirmation(existingUser.EmailAddress, existingUser.Name, dbUserPrompt.Id);
 
             return new RequestEmailAddressConfirmationResponse(true);
+        }
+
+        public async Task<LogoutResponse> LogoutAsync(User user)
+        {
+            if (user == null)
+            {
+                throw new HttpBadRequestException("Unable to sign you out");
+            }
+
+            var tokenId = user.GetTokenId();
+            if (tokenId == null)
+            {
+                throw new HttpBadRequestException("Unable to sign you out");
+            }
+
+            var token = await _userTokenRepository.GetById(tokenId.Value);
+            if (token == null)
+            {
+                return new LogoutResponse(true);
+            }
+
+            await _userTokenRepository.Remove(token);
+            return new LogoutResponse(true);
+        }
+
+        public async Task<ForceLogoutResponse> ForceLogoutAsync(User user)
+        {
+            if (user == null)
+            {
+                throw new HttpBadRequestException("Unable to sign you out");
+            }
+
+            if (user.Id == null)
+            {
+                throw new HttpBadRequestException("Unable to sign you out");
+            }
+
+            var dbUser = await _userRepository.GetById(user.Id.Value);
+            if (dbUser == null)
+            {
+                return new ForceLogoutResponse(true);
+            }
+
+            dbUser.UserTokens.Clear();
+            await _userRepository.Update(dbUser);
+            
+            return new ForceLogoutResponse(true);
         }
     }
 }

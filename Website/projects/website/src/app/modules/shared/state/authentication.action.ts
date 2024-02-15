@@ -109,6 +109,43 @@ export const confirmEmailAddressFailure = createAction(
 );
 //#endregion
 
+//#region Request Email Address Confirmation
+export const loadRequestEmailAddressConfirmationPage = createAction(
+  '[Request Email Address Confirmation Page] Load'
+);
+
+export const requestEmailAddressConfirmation = createAction(
+  '[Request Email Address Confirmation Page] Request Email Address Confirmation',
+  props<{ emailAddress: string }>()
+);
+
+export const requestEmailAddressConfirmationSuccess = createAction(
+  '[Authentication API] Request Email Address Confirmation Success',
+  props<{ success: boolean }>()
+);
+
+export const requestEmailAddressConfirmationFailure = createAction(
+  '[Authentication API] Request Email Address Confirmation Failure',
+  props<{ error: string }>()
+);
+//#endregion
+
+//#region Logout
+export const loadLogoutPage = createAction('[Logout Page] Load');
+
+export const logout = createAction('[Logout Page] Logout');
+
+export const logoutSuccess = createAction(
+  '[Authentication API] Logout Success',
+  props<{ success: boolean }>()
+);
+
+export const logoutFailure = createAction(
+  '[Authentication API] Logout Failure',
+  props<{ error: string }>()
+);
+//#endregion
+
 export const whoAmISuccess = createAction(
   '[Authentication API] Who Am I Success',
   props<{ user: User }>()

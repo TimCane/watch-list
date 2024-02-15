@@ -11,10 +11,13 @@ import {
   ConfirmEmailAddressResponse,
   ForgotPasswordRequest,
   ForgotPasswordResponse,
+  LogoutResponse,
   ReauthenticateRequest,
   ReauthenticateResponse,
   RegisterRequest,
   RegisterResponse,
+  RequestEmailAddressConfirmationRequest,
+  RequestEmailAddressConfirmationResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
   WhoAmIResponse,
@@ -98,6 +101,26 @@ export class UserService extends DataService {
       (res: ConfirmEmailAddressResponse) => res,
       () => {},
       (err) => this.handleError('confirmEmailAddress', err)
+    );
+  }
+
+  requestEmailAddressConfirmation(
+    request: RequestEmailAddressConfirmationRequest
+  ): Observable<RequestEmailAddressConfirmationResponse> {
+    return this.mapResult(
+      this.apiService.requestEmailAddressConfirmation(request),
+      (res: RequestEmailAddressConfirmationResponse) => res,
+      () => {},
+      (err) => this.handleError('requestEmailAddressConfirmation', err)
+    );
+  }
+
+  logout(): Observable<LogoutResponse> {
+    return this.mapResult(
+      this.apiService.logout(),
+      (res: LogoutResponse) => res,
+      () => {},
+      (err) => this.handleError('logout', err)
     );
   }
 

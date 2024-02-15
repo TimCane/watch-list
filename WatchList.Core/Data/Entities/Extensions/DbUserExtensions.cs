@@ -16,6 +16,15 @@ namespace WatchList.Core.Data.Entities.Extensions
                 .HasMany(c => c.UserPrompts)
                 .WithOne(e => e.User);
 
+            builder.Entity<DbUser>()
+                .HasMany(c => c.UserTokens)
+                .WithOne(e => e.User);
+
+            builder
+                .Entity<DbUser>()
+                .Property(d => d.Status)
+                .HasConversion<string>();
+
             return builder;
         }
     }

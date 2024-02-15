@@ -348,6 +348,55 @@
         }
       }
     },
+    "/api/Users/request-email-address-confirmation": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "RequestEmailAddressConfirmation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestEmailAddressConfirmationRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestEmailAddressConfirmationRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestEmailAddressConfirmationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestEmailAddressConfirmationResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server was unable to process the request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Users/whoami": {
       "get": {
         "tags": [
@@ -361,6 +410,66 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/WhoAmIResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server was unable to process the request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/logout": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Logout",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server was unable to process the request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/force-logout": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "ForceLogout",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForceLogoutResponse"
                 }
               }
             }
@@ -459,6 +568,15 @@
         },
         "additionalProperties": false
       },
+      "ForceLogoutResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "ForgotPasswordRequest": {
         "required": [
           "emailAddress"
@@ -474,6 +592,15 @@
         "additionalProperties": false
       },
       "ForgotPasswordResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LogoutResponse": {
         "type": "object",
         "properties": {
           "success": {
@@ -537,6 +664,29 @@
         "additionalProperties": false
       },
       "RegisterResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestEmailAddressConfirmationRequest": {
+        "required": [
+          "emailAddress"
+        ],
+        "type": "object",
+        "properties": {
+          "emailAddress": {
+            "minLength": 1,
+            "type": "string",
+            "example": "bob@watch-list.com"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestEmailAddressConfirmationResponse": {
         "type": "object",
         "properties": {
           "success": {

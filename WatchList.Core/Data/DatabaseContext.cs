@@ -14,6 +14,7 @@ namespace WatchList.Core.Data
 
         public DbSet<DbUser> Users { get; set; }
         public DbSet<DbUserPrompt> DbUserPrompts { get; set; }
+        public DbSet<DbUserToken> DbUserTokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -27,7 +28,8 @@ namespace WatchList.Core.Data
             // Configure each entity type
             modelBuilder
                 .WithDbUser()
-                .WithDbUserPrompt();
+                .WithDbUserPrompt()
+                .WithDbUserToken();
 
             base.OnModelCreating(modelBuilder);
         }

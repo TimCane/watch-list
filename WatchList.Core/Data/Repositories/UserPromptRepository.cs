@@ -19,7 +19,7 @@ namespace WatchList.Core.Data.Repositories
                     .FirstOrDefaultAsync(r =>
                         r.Id == id &&
                         r.Type == DbUserPromptTypeEnum.PasswordReset &&
-                        r.Used == false &&
+                        r.Status == DbUserPromptStatusEnum.Pending &&
                         r.CreatedOn > DateTime.UtcNow.AddDays(-3)
                     );
         }
@@ -32,7 +32,8 @@ namespace WatchList.Core.Data.Repositories
                     .FirstOrDefaultAsync(r =>
                         r.Id == id &&
                         r.Type == DbUserPromptTypeEnum.EmailVerification &&
-                        r.Used == false
+                        r.Status == DbUserPromptStatusEnum.Pending &&
+                        r.CreatedOn > DateTime.UtcNow.AddDays(-3)
                     );
         }
     }

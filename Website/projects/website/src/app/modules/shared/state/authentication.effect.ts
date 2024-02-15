@@ -9,13 +9,20 @@ import {
   confirmEmailAddressFailure,
   confirmEmailAddressSuccess,
   forgotPassword,
+  forgotPasswordFailure,
   forgotPasswordSuccess,
   login,
   loginFailure,
   loginSuccess,
+  logout,
+  logoutFailure,
+  logoutSuccess,
   register,
   registerFailure,
   registerSuccess,
+  requestEmailAddressConfirmation,
+  requestEmailAddressConfirmationFailure,
+  requestEmailAddressConfirmationSuccess,
   resetPassword,
   resetPasswordFailure,
   resetPasswordSuccess,
@@ -61,7 +68,7 @@ export class AuthenticationEffects {
             })
           ),
           catchError((error: ApiException) =>
-            of(loginFailure({ error: error.response }))
+            of(forgotPasswordFailure({ error: error.response }))
           )
         )
       )
@@ -106,6 +113,28 @@ export class AuthenticationEffects {
     )
   );
 
+  requestEmailAddressConfirmation$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(requestEmailAddressConfirmation),
+      switchMap(({ emailAddress }) =>
+        from(
+          this.userService.requestEmailAddressConfirmation({ emailAddress })
+        ).pipe(
+          map(({ success }) =>
+            requestEmailAddressConfirmationSuccess({
+              success: success!,
+            })
+          ),
+          catchError((error: ApiException) =>
+            of(
+              requestEmailAddressConfirmationFailure({ error: error.response })
+            )
+          )
+        )
+      )
+    )
+  );
+
   confirmEmailAddress$ = createEffect(() =>
     this.actions$.pipe(
       ofType(confirmEmailAddress),
@@ -118,6 +147,24 @@ export class AuthenticationEffects {
           ),
           catchError((error: ApiException) =>
             of(confirmEmailAddressFailure({ error: error.response }))
+          )
+        )
+      )
+    )
+  );
+
+  logout$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(logout),
+      switchMap(() =>
+        from(this.userService.logout()).pipe(
+          map(({ success }) =>
+            logoutSuccess({
+              success: success!,
+            })
+          ),
+          catchError((error: ApiException) =>
+            of(logoutFailure({ error: error.response }))
           )
         )
       )

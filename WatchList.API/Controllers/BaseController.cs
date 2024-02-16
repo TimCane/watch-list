@@ -10,11 +10,11 @@ namespace WatchList.API.Controllers
     [Route("api/[controller]")]
     public class BaseController : ControllerBase
     {
-        private readonly ILogger<BaseController> _logger;
+        public readonly ILogger<BaseController> Logger;
 
         public BaseController(ILogger<BaseController> logger)
         {
-            _logger = logger;
+            Logger = logger;
         }
 
         internal async Task<IActionResult> DoUnauthorisedRequest<TResponse, TRequest>(TRequest request,
@@ -81,22 +81,22 @@ namespace WatchList.API.Controllers
             }
             catch (HttpBadRequestException e)
             {
-                _logger.LogInformation("BadRequest: {e.Message}", e.Message);
+                Logger.LogInformation("BadRequest: {e.Message}", e.Message);
                 return BadRequest(e.Message);
             }
             catch (HttpUnauthorizedException e)
             {
-                _logger.LogInformation("Unauthorized: {e.Message}", e.Message);
+                Logger.LogInformation("Unauthorized: {e.Message}", e.Message);
                 return Unauthorized(e.Message);
             }
             catch (HttpInternalServerErrorException e)
             {
-                _logger.LogInformation("Internal Server Error: {e.Message}", e.Message);
+                Logger.LogInformation("Internal Server Error: {e.Message}", e.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
             catch (Exception e)
             {
-                _logger.LogError("Problem: {e.Message}", e.Message);
+                Logger.LogError("Problem: {e.Message}", e.Message);
                 return Problem(e.Message);
             }
         }

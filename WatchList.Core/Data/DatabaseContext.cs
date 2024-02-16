@@ -16,6 +16,15 @@ namespace WatchList.Core.Data
         public DbSet<DbUserPrompt> DbUserPrompts { get; set; }
         public DbSet<DbUserToken> DbUserTokens { get; set; }
 
+        public DbSet<DbCollection> DbCollections { get; set; }
+        public DbSet<DbCredit> DbCredits { get; set; }
+        public DbSet<DbGenre> DbGenres { get; set; }
+        public DbSet<DbKeyword> DbKeywords { get; set; }
+        public DbSet<DbLanguage> DbLanguages { get; set; }
+        public DbSet<DbMovie> DbMovies { get; set; }
+        public DbSet<DbProductionCompany> DbProductionCompanies { get; set; }
+        public DbSet<DbProductionCountry> DbProductionCountries { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
@@ -29,7 +38,30 @@ namespace WatchList.Core.Data
             modelBuilder
                 .WithDbUser()
                 .WithDbUserPrompt()
-                .WithDbUserToken();
+                .WithDbUserToken()
+
+                .WithDbMovie()
+                .WithDbCollection()
+
+                .WithDbGenre()
+                .WithDbMovieGenre()
+                
+                .WithDbCredit()
+                .WithDbMovieCredit()
+
+                .WithDbKeyword()
+                .WithDbMovieKeyword()
+
+                .WithDbLanguage()
+                .WithDbMovieLanguage()
+
+                .WithDbProductionCompany()
+                .WithDbMovieProductionCompany()
+
+                .WithDbProductionCountry()
+                .WithDbMovieProductionCountry()
+
+;
 
             base.OnModelCreating(modelBuilder);
         }

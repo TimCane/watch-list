@@ -10,6 +10,8 @@ namespace WatchList.Core.Data.Entities.Extensions
             {
                 entity.HasKey(p => p.Id);
                 entity.Property(e => e.Id).HasMaxLength(128);
+                entity.Property(e => e.IsAdmin).HasDefaultValue(false);
+                entity.Property(e => e.PasswordAttempts).HasDefaultValue(0);
             });
 
             builder.Entity<DbUser>()

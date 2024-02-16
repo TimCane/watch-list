@@ -117,7 +117,7 @@ namespace WatchList.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(adminOnly: false)]
         [Route("whoami")]
         [Produces("application/json")]
         [SwaggerOperation(OperationId = nameof(WhoAmI))]
@@ -130,7 +130,7 @@ namespace WatchList.API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(adminOnly: false)]
         [Route("logout")]
         [Produces("application/json")]
         [SwaggerOperation(OperationId = nameof(Logout))]
@@ -143,7 +143,7 @@ namespace WatchList.API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(adminOnly: false)]
         [Route("force-logout")]
         [Produces("application/json")]
         [SwaggerOperation(OperationId = nameof(ForceLogout))]

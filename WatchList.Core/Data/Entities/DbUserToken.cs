@@ -10,7 +10,7 @@ using WatchList.Core.Data.Entities.Interfaces;
 namespace WatchList.Core.Data.Entities
 {
 
-    [Table("UserTokens")]
+    [Table("UserToken")]
     public class DbUserToken : IEntity
     {
         public virtual DbUser User { get; set; }

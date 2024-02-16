@@ -4,7 +4,7 @@ using WatchList.Core.Data.Entities.Interfaces;
 
 namespace WatchList.Core.Data.Entities
 {
-    [Table("UserPrompts")]
+    [Table("UserPrompt")]
     public class DbUserPrompt : IEntity
     {
         public virtual DbUser User { get; set; }

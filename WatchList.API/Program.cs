@@ -43,7 +43,24 @@ void ConfigureServices()
     services.AddScoped<IUserPromptRepository, UserPromptRepository>();
     services.AddScoped<IUserTokenRepository, UserTokenRepository>();
 
+    services.AddScoped<ICollectionRepository, CollectionRepository>();
+    services.AddScoped<IGenreRepository, GenreRepository>();
+    services.AddScoped<ICreditRepository, CreditRepository>();
+    services.AddScoped<IKeywordRepository, KeywordRepository>();
+    services.AddScoped<ILanguageRepository, LanguageRepository>();
+    services.AddScoped<IProductionCompanyRepository, ProductionCompanyRepository>();
+    services.AddScoped<IProductionCountryRepository, ProductionCountryRepository>();
+    services.AddScoped<IMovieRepository, MovieRepository>();
+
     services.AddScoped<IUsers, Users>();
+    services.AddScoped<ICollections, Collections>();
+    services.AddScoped<IGenres, Genres>();
+    services.AddScoped<ICredits, Credits>();
+    services.AddScoped<IKeywords, Keywords>();
+    services.AddScoped<ILanguages, Languages>();
+    services.AddScoped<IProductionCompanies, ProductionCompanies>();
+    services.AddScoped<IProductionCountries, ProductionCountries>();
+    services.AddScoped<IMovies, Movies>();
 
     services.AddCors(options =>
     {
@@ -146,9 +163,22 @@ void ConfigureApp()
         context?.Users.Add(new DbUser
         {
             Id = new Guid("4081aaed-9ac8-4a3b-9fda-08da53098d50"),
-            EmailAddress = "tim@watch-list.com",
-            Name = "Tim",
+            EmailAddress = "admin@watch-list.com",
+            Name = "Admin",
             PasswordAttempts = 0,
+            IsAdmin = true,
+            Password = "6LaWQkPDI1473yabhnmI7+Wmm4PZF/XVoQ2AGKo07NlVv7Zy4tMcqeVbg86z4VCtbpLGBscyjuZo53kHivnck/DhbfTux1CozF+mjFlHxeibrD1NWabyToqGEaKfPSRzPgW95u6fC99pXOVkvE9bauI676yYkWlh6GxbzHDjJ/KjqOjV+TvmWp2W/zHwz7BasDQ/QbzSWX2eGmaZR6x3U70Xycbs33TNE8xqsx2gbCx8pt4z931nsjXAh5FgO4/ZYWwEeq+xCMMGWX18w8TDGA9Brpk3g44B3R8mdHiTbKNuyuvpTu2bnYyxu2zLbmBEIIXwk564jyGnlzU0bmidig==",
+            PasswordSalt = "Ut0cFgpT1f7VZn75PlLIeut05KBKRsVq3RUACSgnkZxq2HTTgZc36a9q5UzaKjMYWmCM7Yzjtc6s5lZz+7IRmHfG1I2wJuItW7U70p4rxBfF/1sopJXrf2gAnY98DXPxDyZEpg3pKq+JJ/NCO00BPHEEBC0y8ITPLP/jBXsGyKk=",
+            Status = DbUserStatusTypeEnum.Active,
+        });
+
+        context?.Users.Add(new DbUser
+        {
+            Id = new Guid("5f839195-8126-4a93-9a0f-0ba40866cdf8"),
+            EmailAddress = "user@watch-list.com",
+            Name = "User",
+            PasswordAttempts = 0,
+            IsAdmin = false,
             Password = "6LaWQkPDI1473yabhnmI7+Wmm4PZF/XVoQ2AGKo07NlVv7Zy4tMcqeVbg86z4VCtbpLGBscyjuZo53kHivnck/DhbfTux1CozF+mjFlHxeibrD1NWabyToqGEaKfPSRzPgW95u6fC99pXOVkvE9bauI676yYkWlh6GxbzHDjJ/KjqOjV+TvmWp2W/zHwz7BasDQ/QbzSWX2eGmaZR6x3U70Xycbs33TNE8xqsx2gbCx8pt4z931nsjXAh5FgO4/ZYWwEeq+xCMMGWX18w8TDGA9Brpk3g44B3R8mdHiTbKNuyuvpTu2bnYyxu2zLbmBEIIXwk564jyGnlzU0bmidig==",
             PasswordSalt = "Ut0cFgpT1f7VZn75PlLIeut05KBKRsVq3RUACSgnkZxq2HTTgZc36a9q5UzaKjMYWmCM7Yzjtc6s5lZz+7IRmHfG1I2wJuItW7U70p4rxBfF/1sopJXrf2gAnY98DXPxDyZEpg3pKq+JJ/NCO00BPHEEBC0y8ITPLP/jBXsGyKk=",
             Status = DbUserStatusTypeEnum.Active,

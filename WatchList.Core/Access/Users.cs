@@ -307,6 +307,7 @@ namespace WatchList.Core.Access
                 PasswordSalt = salt,
                 Name = request.Name ?? "",
                 PasswordAttempts = 0,
+                IsAdmin = false,
                 Status = DbUserStatusTypeEnum.RequiresEmailVerification,
                 UserPrompts = new List<DbUserPrompt>
                 {

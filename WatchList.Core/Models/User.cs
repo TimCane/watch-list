@@ -8,6 +8,11 @@
 
         public string? Name { get; set; }
 
+        public bool IsAdmin { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+        public DateTime ModifiedOn { get; set; }
+
         private Guid? _tokenId;
 
         public Guid? GetTokenId()

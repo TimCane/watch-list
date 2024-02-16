@@ -24,6 +24,8 @@ namespace WatchList.Core.Data.Entities
 
         public string Name { get; set; }
 
+        public bool IsAdmin { get; set; }
+
         public Guid Id { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }

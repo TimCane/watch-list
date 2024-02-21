@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using WatchList.Core.Data.Entities;
 using WatchList.Core.Data.Entities.Interfaces;
+using WatchList.Core.Interfaces;
 
 namespace WatchList.Core.Data.Repositories.Interfaces
 {
@@ -14,7 +15,13 @@ namespace WatchList.Core.Data.Repositories.Interfaces
         Task Remove(TEntity entity);
         Task RemoveRange(IEnumerable<TEntity> entities);
 
-        Task<IEnumerable<TEntity>> GetAll();
+        Task<(IEnumerable<TEntity>, int)> GetAll(
+            Expression<Func<TEntity, bool>>? expression = null,
+            int? skip = null,
+            int? take = null,
+            IOrderBy? orderBy = null,
+            int? sort = null
+        );
         Task<IEnumerable<TEntity>> GetWhere(Expression<Func<TEntity, bool>> predicate);
 
         Task<int> CountAll();

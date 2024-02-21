@@ -39,7 +39,7 @@ namespace WatchList.API.Controllers
             description: "The server was unable to process the request", contentTypes: "text/plain")]
         public async Task<IActionResult> Get(Guid id)
         {
-            return await DoRequest(_keywords.Get);
+            return await DoRequest(id, _keywords.Get);
         }
 
         [HttpPost]

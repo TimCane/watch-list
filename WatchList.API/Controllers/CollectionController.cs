@@ -1,4 +1,5 @@
 
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -25,9 +26,9 @@ namespace WatchList.API.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(CollectionsResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery][Required] PagedRequest request)
         {
-            return await DoRequest(_collections.Get);
+            return await DoRequest(request, _collections.Get);
         }
 
         [HttpGet("{id:guid}")]
@@ -39,7 +40,7 @@ namespace WatchList.API.Controllers
             description: "The server was unable to process the request", contentTypes: "text/plain")]
         public async Task<IActionResult> Get(Guid id)
         {
-            return await DoRequest(_collections.Get);
+            return await DoRequest(id, _collections.Get);
         }
 
         [HttpPost]

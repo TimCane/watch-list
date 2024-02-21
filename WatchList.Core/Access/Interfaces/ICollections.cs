@@ -12,7 +12,7 @@ namespace WatchList.Core.Access.Interfaces
 {
     public interface ICollections
     {
-        Task<CollectionsResponse> Get(User user);
+        Task<CollectionsResponse> Get(User user, PagedRequest request);
 
         Task<CollectionResponse> Get(User user, Guid id);
 

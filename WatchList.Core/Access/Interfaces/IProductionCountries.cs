@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WatchList.Core.Models;
 using WatchList.Core.Models.Requests;
 using WatchList.Core.Models.Responses;
+using WatchList.Core.Models.Responses.Interfaces;
 
 namespace WatchList.Core.Access.Interfaces
 {

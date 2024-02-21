@@ -15,12 +15,12 @@ namespace WatchList.Core.Access
     public class ProductionCompanies : IProductionCompanies
     {
         private readonly IMapper _mapper;
-        private readonly IProductionCompanyRepository _productioncompanyRepository;
+        private readonly IProductionCompanyRepository _productionCompanyRepository;
 
-        public ProductionCompanies(IMapper mapper, IProductionCompanyRepository productioncompanyRepository)
+        public ProductionCompanies(IMapper mapper, IProductionCompanyRepository productionCompanyRepository)
         {
             _mapper = mapper;
-            _productioncompanyRepository = productioncompanyRepository;
+            _productionCompanyRepository = productionCompanyRepository;
         }
 
         public async Task<ProductionCompaniesResponse> Get(User user)

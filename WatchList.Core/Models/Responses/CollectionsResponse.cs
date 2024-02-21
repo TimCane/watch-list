@@ -5,6 +5,7 @@ using WatchList.Core.Swagger;
 
 namespace WatchList.Core.Models.Responses;
 
-public class CollectionsResponse : IResponse
+public class CollectionsResponse : PagedResponse
 {
+    public List<Collection> Collections { get; set; }
 }

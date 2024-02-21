@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using WatchList.Core.Data.Entities.Interfaces;
 using WatchList.Core.Data.Repositories.Interfaces;
+using WatchList.Core.Extensions;
+using WatchList.Core.Interfaces;
 
 namespace WatchList.Core.Data.Repositories
 {
@@ -43,9 +45,31 @@ namespace WatchList.Core.Data.Repositories
             return Context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll()
+        public async Task<(IEnumerable<TEntity>, int)> GetAll(Expression<Func<TEntity, bool>>? expression = null, int? skip = null, int? take = null, IOrderBy? orderBy = null, int? sort = null)
         {
-            return await Context.Set<TEntity>().ToListAsync();
+            var data = Context.Set<TEntity>().AsQueryable();
+
+            if (expression != null)
+            {
+                data = data.Where(expression);
+            }
+
+            var total = data.Count();
+
+            if (orderBy != null && sort.HasValue)
+            {
+                data = sort.Value == 0
+                    ? data.OrderBy(orderBy)
+                    : data.OrderByDescending(orderBy);
+            }
+
+            if (skip.HasValue && take.HasValue)
+            {
+                data = data.Skip(skip.Value)
+                    .Take(take.Value);
+            }
+
+            return (data, total);
         }
 
         public async Task<IEnumerable<TEntity>> GetWhere(Expression<Func<TEntity, bool>> predicate)

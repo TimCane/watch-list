@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WatchList.Core.Interfaces;
+﻿using WatchList.Core.Interfaces;
 
 namespace WatchList.Core.Extensions
 {

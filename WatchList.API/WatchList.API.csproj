@@ -20,6 +20,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WatchList.Core\WatchList.Core.csproj" />
+    <ProjectReference Include="..\WatchList.Editor\WatchList.Editor.csproj" />
+    <ProjectReference Include="..\WatchList.Identity\WatchList.Identity.csproj" />
   </ItemGroup>
 
 </Project>

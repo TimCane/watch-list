@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WatchList.Core.Exceptions
+﻿namespace WatchList.Core.Exceptions
 {
     public class TokenGenerationException : Exception
     {

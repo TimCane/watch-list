@@ -2,7 +2,7 @@
 using WatchList.API.Middleware;
 using WatchList.Core.Exceptions;
 using WatchList.Core.Models;
-using WatchList.Core.Models.Responses.Interfaces;
+using WatchList.Core.Models.Interfaces;
 
 namespace WatchList.API.Controllers
 {

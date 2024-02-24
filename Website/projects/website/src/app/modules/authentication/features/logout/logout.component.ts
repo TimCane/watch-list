@@ -12,7 +12,7 @@ import {
 } from '../../../shared/state/authentication.selectors';
 
 @Component({
-  selector: 'app-logout',
+  selector: 'authentication-logout',
   templateUrl: './logout.component.html',
   styleUrls: ['./logout.component.scss'],
 })

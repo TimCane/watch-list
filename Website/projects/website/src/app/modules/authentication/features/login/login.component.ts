@@ -18,7 +18,7 @@ interface LoginForm {
 }
 
 @Component({
-  selector: 'app-login',
+  selector: 'authentication-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })

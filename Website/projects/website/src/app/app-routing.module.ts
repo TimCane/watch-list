@@ -9,6 +9,11 @@ const routes: Routes = [
         (m) => m.AuthenticationModule
       ),
   },
+  {
+    path: 'editor',
+    loadChildren: () =>
+      import('./modules/editor/editor.module').then((m) => m.EditorModule),
+  },
 ];
 
 @NgModule({

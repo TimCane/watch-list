@@ -1,0 +1,28 @@
+<aside
+  class="fixed top-0 left-0 z-4 lg:flex flex-column flex-shrink-0 w-18rem h-full pt-8 font-normal animation-duration-100 lg:flex transition-all"
+  [ngClass]="{ flex: toggle, hidden: !toggle }"
+>
+  <div
+    class="relative flex flex-column flex-1 min-h-0 pt-0 border-right-1 border-100 surface-50"
+  >
+    <div class="flex flex-column overflow-y-auto lg:hidden">
+      <div class="mt-5 px-2 py-2 lg:mt-9 lg:px-3">
+        <span class="p-input-icon-left w-full">
+          <i class="pi pi-search"></i>
+          <input type="text" pInputText class="w-full" />
+        </span>
+      </div>
+    </div>
+    <div class="flex flex-column overflow-y-auto">
+      <nav class="mt-5 px-2 py-2 lg:mt-9 lg:px-3">
+        <p-panelMenu [model]="items" [multiple]="true"></p-panelMenu>
+      </nav>
+    </div>
+  </div>
+</aside>
+
+<div
+  class="fixed bottom-0 top-0 left-0 right-0 surface-200 z-3"
+  [ngClass]="{ fixed: toggle, hidden: !toggle }"
+  (click)="toggleSidebar()"
+></div>

@@ -22,7 +22,7 @@ interface ResetPasswordForm {
 }
 
 @Component({
-  selector: 'app-reset-password',
+  selector: 'authentication-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss'],
 })

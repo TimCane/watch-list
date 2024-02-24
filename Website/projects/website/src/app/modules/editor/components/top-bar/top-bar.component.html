@@ -1,0 +1,59 @@
+<nav class="fixed z-5 w-full border-bottom-1 border-100 surface-50">
+  <div class="px-3 py-3 lg:px-5 lg:pl-3">
+    <div class="flex align-items-center justify-content-between">
+      <div class="flex align-items-center justify-content-start">
+        <p-button
+          class="p-2 lg:hidden"
+          icon="pi pi-bars"
+          styleClass="p-button-outlined"
+          (click)="toggleSidebar()"
+        ></p-button>
+        <a [routerLink]="['/']" class="flex ml-2 md:mr-8 no-underline text-primary hover:underline">
+          <p-image
+            class="mr-3"
+            src="/assets/logo.svg"
+            alt="Logo"
+            width="38"
+          ></p-image>
+          <span
+            class="align-self-center text-xl font-semibold sm:text-2xl white-space-nowrap mb-1"
+            >Watch List</span
+          >
+        </a>
+        <form action="#" method="get" class="hidden lg:block lg:pl-3">
+          <div class="relative mt-1 w-30rem">
+            <span class="p-input-icon-left w-full">
+              <i class="pi pi-search"></i>
+              <input type="text" pInputText class="w-full" />
+            </span>
+          </div>
+        </form>
+      </div>
+      <div class="flex align-items-center">
+        <p-button
+          class="p-2 lg:hidden"
+          icon="pi pi-search"
+          styleClass="p-button-text"
+          (click)="toggleSidebar()"
+        ></p-button>
+        <div class="relative">
+          <div *ngIf="user && user.name" #profile (click)="onProfileMenu($event)">
+            <p-avatar
+              [label]="user.name[0]"
+              styleClass="mr-2"
+              size="large"
+              shape="circle"
+              [style]="{ 'background-color': avatarBgColour, color: avatarTextColour }"
+            ></p-avatar>
+          </div>
+          <p-menu
+            [model]="items"
+            appendTo="profile"
+            [popup]="true"
+            styleClass="top-auto left-auto right-0"
+          ></p-menu>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -21,6 +21,7 @@
           </div>
           <div *ngSwitchCase="'success'">
             <div class="flex justify-content-center">YES!!</div>
+            <a [routerLink]="['/','editor']">Editor</a>
           </div>
           <div *ngSwitchDefault>
             <div class="flex flex-column gap-2">

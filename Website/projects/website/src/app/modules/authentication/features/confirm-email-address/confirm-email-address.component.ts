@@ -13,7 +13,7 @@ import {
 import { isGuid } from '../../../shared/utils/is-guid';
 
 @Component({
-  selector: 'app-confirm-email-address',
+  selector: 'authentication-confirm-email-address',
   templateUrl: './confirm-email-address.component.html',
   styleUrls: ['./confirm-email-address.component.scss'],
 })

@@ -24,7 +24,7 @@ interface RegisterForm {
 }
 
 @Component({
-  selector: 'app-register',
+  selector: 'authentication-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })

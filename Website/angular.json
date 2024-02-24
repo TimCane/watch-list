@@ -63,9 +63,10 @@
               "projects/website/src/assets"
             ],
             "styles": [
-              "node_modules/primeng/resources/themes/lara-dark-teal/theme.css",
+              "node_modules/primeng/resources/themes/viva-light/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeflex/primeflex.css",
+              "node_modules/primeicons/primeicons.css",
               "projects/website/src/styles.scss"
             ],
             "scripts": []

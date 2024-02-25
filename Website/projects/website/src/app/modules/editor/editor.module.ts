@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { EditorRoutingModule } from './editor-routing.module';
 import { EditorComponent } from './editor.component';
 
-import { HeaderModule } from './components/header/header.module';
+import { PageHeaderModule } from './components/page-header/page-header.module';
 import { SideBarModule } from './components/side-bar/side-bar.module';
 import { TopBarModule } from './components/top-bar/top-bar.module';
 
@@ -15,7 +15,7 @@ import { TopBarModule } from './components/top-bar/top-bar.module';
     EditorRoutingModule,
     SideBarModule,
     TopBarModule,
-    HeaderModule,
+    PageHeaderModule,
   ],
 })
 export class EditorModule {}

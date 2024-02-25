@@ -6,11 +6,11 @@ import { Subject, filter, takeUntil } from 'rxjs';
 export const ROUTE_DATA_BREADCRUMB = 'breadcrumb';
 
 @Component({
-  selector: 'editor-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  selector: 'editor-page-header',
+  templateUrl: './page-header.component.html',
+  styleUrls: ['./page-header.component.scss'],
 })
-export class HeaderComponent implements OnDestroy {
+export class PageHeaderComponent implements OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   pageName: string | null = null;

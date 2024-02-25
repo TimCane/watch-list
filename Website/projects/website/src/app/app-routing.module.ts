@@ -14,6 +14,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/editor/editor.module').then((m) => m.EditorModule),
   },
+  {
+    path: '',
+    redirectTo: '/editor/dashboard',
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({

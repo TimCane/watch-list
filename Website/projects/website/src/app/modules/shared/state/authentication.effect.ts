@@ -1,8 +1,19 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { ApiException, UserService } from 'api-client';
-import { catchError, from, map, mergeMap, of, switchMap, tap } from 'rxjs';
+import {
+  catchError,
+  delay,
+  exhaustMap,
+  from,
+  map,
+  mergeMap,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { AppState } from '../../../app.state';
 import { CookieService } from '../services/cookie.service';
 import {
@@ -40,7 +51,8 @@ export class AuthenticationEffects {
     private actions$: Actions,
     private store: Store<AppState>,
     private userService: UserService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private router: Router
   ) {}
 
   init$ = createEffect(() => {
@@ -77,6 +89,16 @@ export class AuthenticationEffects {
         )
       )
     )
+  );
+
+  loginSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(loginSuccess),
+        delay(750),
+        exhaustMap(() => this.router.navigate(['']))
+      ),
+    { dispatch: false }
   );
 
   forgotPassword$ = createEffect(() =>
@@ -196,6 +218,16 @@ export class AuthenticationEffects {
         )
       )
     )
+  );
+
+  logoutSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(logoutSuccess),
+        delay(3000),
+        exhaustMap(() => this.router.navigate(['/', 'auth', 'login']))
+      ),
+    { dispatch: false }
   );
 
   whoAmI$ = createEffect(() =>

@@ -7,6 +7,8 @@ namespace WatchList.Editor.Entities
     public class DbLanguage : IEntity
     {
         public Guid Id { get; set; }
+
+        public string Iso { get; set; }
         public string Name { get; set; }
 
         public DateTime CreatedOn { get; set; }

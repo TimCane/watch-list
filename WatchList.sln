@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchList.Identity", "Watch
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchList.Editor", "WatchList.Editor\WatchList.Editor.csproj", "{044B89C3-BBA5-401D-BD3D-AF47CAD49661}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchList.Seed", "WatchList.Seed\WatchList.Seed.csproj", "{F3A0056C-7066-4388-A718-9705BFCE289B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{044B89C3-BBA5-401D-BD3D-AF47CAD49661}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{044B89C3-BBA5-401D-BD3D-AF47CAD49661}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{044B89C3-BBA5-401D-BD3D-AF47CAD49661}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3A0056C-7066-4388-A718-9705BFCE289B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3A0056C-7066-4388-A718-9705BFCE289B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3A0056C-7066-4388-A718-9705BFCE289B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3A0056C-7066-4388-A718-9705BFCE289B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

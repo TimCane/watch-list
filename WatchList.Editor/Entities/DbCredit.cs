@@ -9,7 +9,7 @@ namespace WatchList.Editor.Entities
     {
         public Guid Id { get; set; }
 
-        public string Character { get; set; }
+        public string? Character { get; set; }
         public DbCreditGenderEnum Gender { get; set; }
         public string Name { get; set; }
         public int Order { get; set; }

@@ -22,8 +22,17 @@ namespace WatchList.Editor.Data
         public DbSet<DbProductionCompany> DbProductionCompanies { get; set; }
         public DbSet<DbProductionCountry> DbProductionCountries { get; set; }
 
+        public DbSet<DbMovieGenre> MovieGenres { get; set; }
+        public DbSet<DbMovieProductionCompany> MovieProductionCompanies { get; set; }
+        public DbSet<DbMovieProductionCountry> MovieProductionCountries { get; set; }
+        public DbSet<DbMovieLanguage> MovieLanguages { get; set; }
+        public DbSet<DbMovieKeyword> MovieKeywords { get; set; }
+        public DbSet<DbMovieCredit> MovieCredits { get; set; }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=WatchList;Integrated Security=True;TrustServerCertificate=True");
             optionsBuilder
                 .UseLazyLoadingProxies();
             base.OnConfiguring(optionsBuilder);

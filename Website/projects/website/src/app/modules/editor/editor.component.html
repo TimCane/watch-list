@@ -1,4 +1,4 @@
-<editor-top-bar (onSidebarToggled)="onSidebarToggled()" ></editor-top-bar>
+<editor-top-bar (onSidebarToggled)="onSidebarToggled()" [user]="user$ | async"></editor-top-bar>
 <div class="flex pt-8 overflow-hidden">
   <editor-side-bar
     [toggle]="sidebarToggle"

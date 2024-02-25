@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { PrimeNGConfig } from 'primeng/api';
+import { AppState } from './app.state';
+import { cookieCheck } from './modules/shared/state/authentication.action';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +10,12 @@ import { PrimeNGConfig } from 'primeng/api';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private primengConfig: PrimeNGConfig) {}
+  constructor(
+    private primengConfig: PrimeNGConfig,
+    private store: Store<AppState>
+  ) {
+    this.store.dispatch(cookieCheck());
+  }
 
   ngOnInit() {
     this.primengConfig.ripple = true;

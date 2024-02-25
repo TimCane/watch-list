@@ -2,12 +2,16 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { ApiException, UserService } from 'api-client';
-import { catchError, from, map, of, switchMap } from 'rxjs';
+import { catchError, from, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { AppState } from '../../../app.state';
+import { CookieService } from '../services/cookie.service';
 import {
   confirmEmailAddress,
   confirmEmailAddressFailure,
   confirmEmailAddressSuccess,
+  cookieCheck,
+  cookieCheckFailure,
+  cookieCheckSuccess,
   forgotPassword,
   forgotPasswordFailure,
   forgotPasswordSuccess,
@@ -35,14 +39,32 @@ export class AuthenticationEffects {
   constructor(
     private actions$: Actions,
     private store: Store<AppState>,
-    private userService: UserService
+    private userService: UserService,
+    private cookieService: CookieService
   ) {}
+
+  init$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(cookieCheck),
+      mergeMap(() =>
+        this.cookieService.getCookie().pipe(
+          map(({ bearerToken, refreshToken }) =>
+            cookieCheckSuccess({ bearerToken, refreshToken })
+          ),
+          catchError(() => of(cookieCheckFailure({ error: 'Error' })))
+        )
+      )
+    );
+  });
 
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(login),
       switchMap(({ emailAddress, password }) =>
         from(this.userService.authenticate({ emailAddress, password })).pipe(
+          tap(({ bearerToken, refreshToken }) => {
+            this.cookieService.setCookie(bearerToken!, refreshToken!);
+          }),
           map(({ bearerToken, refreshToken }) =>
             loginSuccess({
               bearerToken: bearerToken!,
@@ -158,6 +180,11 @@ export class AuthenticationEffects {
       ofType(logout),
       switchMap(() =>
         from(this.userService.logout()).pipe(
+          tap(({ success }) => {
+            if (success) {
+              this.cookieService.clearCookie();
+            }
+          }),
           map(({ success }) =>
             logoutSuccess({
               success: success!,
@@ -173,7 +200,7 @@ export class AuthenticationEffects {
 
   whoAmI$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(loginSuccess),
+      ofType(loginSuccess, cookieCheckSuccess),
       switchMap((_) =>
         from(this.userService.whoAmI()).pipe(
           map(({ user }) =>
@@ -181,9 +208,10 @@ export class AuthenticationEffects {
               user: user!,
             })
           ),
-          catchError((error: ApiException) =>
-            of(whoAmIFailure({ error: error.response }))
-          )
+          catchError((error: ApiException) => {
+            this.cookieService.clearCookie();
+            return of(whoAmIFailure({ error: error.response }));
+          })
         )
       )
     )

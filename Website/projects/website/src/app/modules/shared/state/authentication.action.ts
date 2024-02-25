@@ -155,3 +155,15 @@ export const whoAmIFailure = createAction(
   '[Authentication API] Who Am I Failure',
   props<{ error: string }>()
 );
+
+export const cookieCheck = createAction('[App] Cookie Check');
+
+export const cookieCheckSuccess = createAction(
+  '[Authentication API] Cookie Check Success',
+  props<{ bearerToken: string; refreshToken: string }>()
+);
+
+export const cookieCheckFailure = createAction(
+  '[Authentication API] Cookie Check Failure',
+  props<{ error: string }>()
+);

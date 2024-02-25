@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { authGuardFunction } from '../shared/guards/auth.guard';
 import { EditorComponent } from './editor.component';
 
 const routes: Routes = [
   {
     path: '',
     component: EditorComponent,
+    canActivate: [authGuardFunction],
     data: {
       breadcrumb: 'Editor',
     },

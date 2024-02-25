@@ -3,6 +3,8 @@ import {
   confirmEmailAddress,
   confirmEmailAddressFailure,
   confirmEmailAddressSuccess,
+  cookieCheckFailure,
+  cookieCheckSuccess,
   forgotPassword,
   forgotPasswordFailure,
   forgotPasswordSuccess,
@@ -199,14 +201,14 @@ export const authenticationReducer = createReducer<AuthenticationState>(
 
   on(logout, (state) => ({
     ...state,
-    user: null,
-    bearerToken: null,
-    refreshToken: null,
     status: 'loading',
   })),
 
   on(logoutSuccess, (state, { success }) => ({
     ...state,
+    user: success ? null : state.user,
+    bearerToken: success ? null : state.bearerToken,
+    refreshToken: success ? null : state.refreshToken,
     error: success ? null : 'There was an error, please try again later.',
     status: success ? 'success' : 'error',
   })),
@@ -230,6 +232,20 @@ export const authenticationReducer = createReducer<AuthenticationState>(
     user: null,
     bearerToken: null,
     refreshToken: null,
+    error: error,
+    status: 'error',
+  })),
+
+  on(cookieCheckSuccess, (state, { bearerToken, refreshToken }) => ({
+    ...state,
+    bearerToken: bearerToken,
+    refreshToken: refreshToken,
+    error: null,
+    status: 'success',
+  })),
+
+  on(cookieCheckFailure, (state, { error }) => ({
+    ...state,
     error: error,
     status: 'error',
   }))

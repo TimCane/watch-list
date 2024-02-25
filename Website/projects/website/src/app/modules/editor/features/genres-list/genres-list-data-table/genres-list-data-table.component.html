@@ -1,0 +1,18 @@
+<div
+  *ngIf="{
+    genres: genres$ | async,
+    total: total$ | async
+  } as state"
+>
+  <p-card *ngIf="state.genres != null && state.total != null">
+    <div class="m-0">
+      <editor-data-table
+        [data]="state.genres"
+        [total]="state.total"
+        [columns]="columns"
+        (onLoadData)="onDataLoad($event)"
+      >
+      </editor-data-table>
+    </div>
+  </p-card>
+</div>

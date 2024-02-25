@@ -31,10 +31,10 @@
                   id="emailAddress"
                   formControlName="emailAddress"
                 />
-                <app-input-error
+                <shared-input-error
                   [form]="form"
                   [control]="emailAddress"
-                ></app-input-error>
+                ></shared-input-error>
               </div>
               <div class="flex flex-column gap-2">
                 <label for="password">Password</label>
@@ -47,10 +47,10 @@
                   [feedback]="false"
                   [toggleMask]="true"
                 />
-                <app-input-error
+                <shared-input-error
                   [form]="form"
                   [control]="password"
-                ></app-input-error>
+                ></shared-input-error>
               </div>
               <button pButton class="w-full" label="Login"></button>
               <div

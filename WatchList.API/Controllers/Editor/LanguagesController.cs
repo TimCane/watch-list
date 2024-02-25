@@ -10,73 +10,69 @@ using WatchList.Editor.Models.Responses;
 
 namespace WatchList.API.Controllers.Editor
 {
-    public class GenresController : BaseController
+    public class LanguagesController : BaseController
     {
-        private readonly IGenres _genres;
+        private readonly ILanguages _languages;
 
-        public GenresController(IGenres genres, ILogger<GenresController> logger) : base(logger)
+        public LanguagesController(ILanguages languages, ILogger<LanguagesController> logger) : base(logger)
         {
-            _genres = genres;
+            _languages = languages;
         }
 
         [HttpGet]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(GetAll))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(GenresResponse), contentTypes: "application/json")]
+        [SwaggerOperation(OperationId = "languagesAll")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(LanguagesResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
         public async Task<IActionResult> GetAll([FromQuery][Required] PagedRequest request)
         {
-            return await DoRequest(request, _genres.Get);
+            return await DoRequest(request, _languages.Get);
         }
 
         [HttpGet("{id:guid}")]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Get))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(GenreResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(LanguageResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
         public async Task<IActionResult> Get(Guid id)
         {
-            return await DoRequest(id, _genres.Get);
+            return await DoRequest(id, _languages.Get);
         }
 
         [HttpPost]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Create))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(CreateGenreResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(CreateLanguageResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
-        public async Task<IActionResult> Create(CreateGenreRequest request)
+        public async Task<IActionResult> Create(CreateLanguageRequest request)
         {
-            return await DoRequest(request, _genres.Create);
+            return await DoRequest(request, _languages.Create);
         }
 
         [HttpPut("{id:guid}")]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Update))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(UpdateGenreResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(UpdateLanguageResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
-        public async Task<IActionResult> Update(Guid id, UpdateGenreRequest request)
+        public async Task<IActionResult> Update(Guid id, UpdateLanguageRequest request)
         {
-            return await DoRequest(id, request, _genres.Update);
+            return await DoRequest(id, request, _languages.Update);
         }
 
         [HttpDelete("{id:guid}")]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Delete))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(DeleteGenreResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(DeleteLanguageResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            return await DoRequest(id, _genres.Delete);
+            return await DoRequest(id, _languages.Delete);
         }
     }
 }

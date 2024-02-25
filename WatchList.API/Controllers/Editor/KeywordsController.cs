@@ -10,73 +10,69 @@ using WatchList.Editor.Models.Responses;
 
 namespace WatchList.API.Controllers.Editor
 {
-    public class ProductionCompaniesController : BaseController
+    public class KeywordsController : BaseController
     {
-        private readonly IProductionCompanies _productionCompanies;
+        private readonly IKeywords _keywords;
 
-        public ProductionCompaniesController(IProductionCompanies productionCompanies, ILogger<ProductionCompaniesController> logger) : base(logger)
+        public KeywordsController(IKeywords keywords, ILogger<KeywordsController> logger) : base(logger)
         {
-            _productionCompanies = productionCompanies;
+            _keywords = keywords;
         }
 
         [HttpGet]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(GetAll))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(ProductionCompaniesResponse), contentTypes: "application/json")]
+        [SwaggerOperation(OperationId = "keywordsAll")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(KeywordsResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
         public async Task<IActionResult> GetAll([FromQuery][Required] PagedRequest request)
         {
-            return await DoRequest(request, _productionCompanies.Get);
+            return await DoRequest(request, _keywords.Get);
         }
 
         [HttpGet("{id:guid}")]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Get))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(ProductionCompanyResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(KeywordResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
         public async Task<IActionResult> Get(Guid id)
         {
-            return await DoRequest(id, _productionCompanies.Get);
+            return await DoRequest(id, _keywords.Get);
         }
 
         [HttpPost]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Create))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(CreateProductionCompanyResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(CreateKeywordResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
-        public async Task<IActionResult> Create(CreateProductionCompanyRequest request)
+        public async Task<IActionResult> Create(CreateKeywordRequest request)
         {
-            return await DoRequest(request, _productionCompanies.Create);
+            return await DoRequest(request, _keywords.Create);
         }
 
         [HttpPut("{id:guid}")]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Update))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(UpdateProductionCompanyResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(UpdateKeywordResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
-        public async Task<IActionResult> Update(Guid id, UpdateProductionCompanyRequest request)
+        public async Task<IActionResult> Update(Guid id, UpdateKeywordRequest request)
         {
-            return await DoRequest(id, request, _productionCompanies.Update);
+            return await DoRequest(id, request, _keywords.Update);
         }
 
         [HttpDelete("{id:guid}")]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Delete))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(DeleteProductionCompanyResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(DeleteKeywordResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            return await DoRequest(id, _productionCompanies.Delete);
+            return await DoRequest(id, _keywords.Delete);
         }
     }
 }

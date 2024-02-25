@@ -10,73 +10,69 @@ using WatchList.Editor.Models.Responses;
 
 namespace WatchList.API.Controllers.Editor
 {
-    public class ProductionCountriesController : BaseController
+    public class CollectionsController : BaseController
     {
-        private readonly IProductionCountries _productionCountries;
+        private readonly ICollections _collections;
 
-        public ProductionCountriesController(IProductionCountries productionCountries, ILogger<ProductionCountriesController> logger) : base(logger)
+        public CollectionsController(ICollections collections, ILogger<CollectionsController> logger) : base(logger)
         {
-            _productionCountries = productionCountries;
+            _collections = collections;
         }
 
         [HttpGet]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(GetAll))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(ProductionCountriesResponse), contentTypes: "application/json")]
+        [SwaggerOperation(OperationId = "collectionsAll")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(CollectionsResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
         public async Task<IActionResult> GetAll([FromQuery][Required] PagedRequest request)
         {
-            return await DoRequest(request, _productionCountries.Get);
+            return await DoRequest(request, _collections.Get);
         }
 
         [HttpGet("{id:guid}")]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Get))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(ProductionCountryResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(CollectionResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
         public async Task<IActionResult> Get(Guid id)
         {
-            return await DoRequest(id, _productionCountries.Get);
+            return await DoRequest(id, _collections.Get);
         }
 
         [HttpPost]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Create))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(CreateProductionCountryResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(CreateCollectionResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
-        public async Task<IActionResult> Create(CreateProductionCountryRequest request)
+        public async Task<IActionResult> Create(CreateCollectionRequest request)
         {
-            return await DoRequest(request, _productionCountries.Create);
+            return await DoRequest(request, _collections.Create);
         }
 
         [HttpPut("{id:guid}")]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Update))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(UpdateProductionCountryResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(UpdateCollectionResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
-        public async Task<IActionResult> Update(Guid id, UpdateProductionCountryRequest request)
+        public async Task<IActionResult> Update(Guid id, UpdateCollectionRequest request)
         {
-            return await DoRequest(id, request, _productionCountries.Update);
+            return await DoRequest(id, request, _collections.Update);
         }
 
         [HttpDelete("{id:guid}")]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Delete))]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(DeleteProductionCountryResponse), contentTypes: "application/json")]
+        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(DeleteCollectionResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            return await DoRequest(id, _productionCountries.Delete);
+            return await DoRequest(id, _collections.Delete);
         }
     }
 }

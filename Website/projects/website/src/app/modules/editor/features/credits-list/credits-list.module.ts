@@ -1,17 +1,24 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { CreditsEffects } from '../../state/credits/credits.effect';
+import { creditsReducer } from '../../state/credits/credits.reducer';
+import { CreditsListDataTableModule } from './credits-list-data-table/credits-list-data-table.module';
 import { CreditsListRoutingModule } from './credits-list-routing.module';
 import { CreditsListComponent } from './credits-list.component';
 
-
 @NgModule({
-  declarations: [
-    CreditsListComponent
-  ],
+  declarations: [CreditsListComponent],
   imports: [
     CommonModule,
-    CreditsListRoutingModule
-  ]
+    CreditsListRoutingModule,
+    CreditsListDataTableModule,
+    StoreModule.forFeature('creditsFeature', creditsReducer),
+    EffectsModule.forFeature([CreditsEffects]),
+  ],
+  providers: [MessageService, ConfirmationService],
 })
-export class CreditsListModule { }
+export class CreditsListModule {}

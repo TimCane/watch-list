@@ -1,6 +1,7 @@
 using AutoMapper;
 using WatchList.Editor.Entities;
 using WatchList.Editor.Models;
+using WatchList.Editor.Models.Requests;
 
 namespace WatchList.Editor.Mappings
 {
@@ -9,6 +10,13 @@ namespace WatchList.Editor.Mappings
         public CollectionProfile()
         {
             CreateMap<DbCollection, Collection>();
+            CreateMap<Collection, DbCollection>();
+
+            CreateMap<CreateCollectionRequest, DbCollection>();
+            CreateMap<DbCollection, CreateCollectionRequest>();
+
+            CreateMap<UpdateCollectionRequest, DbCollection>();
+            CreateMap<DbCollection, UpdateCollectionRequest>();
         }
     }
 }

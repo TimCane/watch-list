@@ -22,7 +22,7 @@ namespace WatchList.API.Controllers.Editor
         [HttpGet]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(GetAll))]
+        [SwaggerOperation(OperationId = "moviesAll")]
         [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(MoviesResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
@@ -34,7 +34,6 @@ namespace WatchList.API.Controllers.Editor
         [HttpGet("{id:guid}")]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Get))]
         [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(MovieResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
@@ -46,7 +45,6 @@ namespace WatchList.API.Controllers.Editor
         [HttpPost]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Create))]
         [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(CreateMovieResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
@@ -58,7 +56,6 @@ namespace WatchList.API.Controllers.Editor
         [HttpPut("{id:guid}")]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Update))]
         [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(UpdateMovieResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]
@@ -70,7 +67,6 @@ namespace WatchList.API.Controllers.Editor
         [HttpDelete("{id:guid}")]
         [Authorize(adminOnly: true)]
         [Produces("application/json")]
-        [SwaggerOperation(OperationId = nameof(Delete))]
         [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(DeleteMovieResponse), contentTypes: "application/json")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, type: typeof(string),
             description: "The server was unable to process the request", contentTypes: "text/plain")]

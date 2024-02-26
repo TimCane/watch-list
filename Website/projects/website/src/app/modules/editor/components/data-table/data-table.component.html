@@ -15,16 +15,29 @@
   [globalFilterFields]="searchFields"
   [tableStyle]="{ width: '100%' }"
   styleClass="p-datatable-sm p-datatable-gridlines p-datatable-striped"
+  [scrollable]="true" scrollHeight="65vh"
 >
   <ng-template pTemplate="caption">
-    <div class="flex">
+    <div class="flex gap-2">
+      <p-multiSelect
+        [options]="columns"
+        [(ngModel)]="selectedColumns"
+        optionLabel="caption"
+        selectedItemsLabel="{0} columns selected"
+        [style]="{ 'min-width': '15rem' }"
+        placeholder="Choose Columns"
+        (ngModelChange)="onSelectedColumnsChange()"
+      >
+      </p-multiSelect>
       <button
         pButton
-        label="Clear"
-        class="p-button-outlined"
-        icon="pi pi-filter-slash"
-        (click)="clear()"
+        class="p-button-text p-button-rounded"
+        hover-class="pi-spin"
+        icon="pi pi-refresh"
+        (click)="resetSelectedColumns()"
+        *ngIf="hasSelectedColumns"
       ></button>
+
       <span class="p-input-icon-left ml-auto">
         <i class="pi pi-search"></i>
         <input
@@ -35,39 +48,110 @@
           placeholder="Search keyword"
         />
       </span>
+      <button
+        pButton
+        label="Clear"
+        class="p-button-outlined"
+        icon="pi pi-filter-slash"
+        (click)="clear()"
+      ></button>
     </div>
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th *ngFor="let column of columns" [pSortableColumn]="column.field">{{ column.caption }} <p-sortIcon [field]="column.field"></p-sortIcon></th>
+      <th
+        *ngFor="let column of selectedColumns | sort : 'order'"
+        [pSortableColumn]="column.field"
+      >
+        {{ column.caption }} <p-sortIcon [field]="column.field"></p-sortIcon>
+      </th>
+      <th *ngIf="actions.length > 0"></th>
     </tr>
-    <tr>
-      <th *ngFor="let column of columns">
+    <tr *ngIf="showFilterRow">
+      <th *ngFor="let column of selectedColumns | sort : 'order'">
         <p-columnFilter
-        *ngIf="column.filterable"
+          *ngIf="column.filterable"
           [type]="column.type"
           [field]="column.field"
         ></p-columnFilter>
       </th>
+      <th *ngIf="actions.length > 0"></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-data>
     <tr>
-      <td *ngFor="let column of columns">
+      <td *ngFor="let column of selectedColumns | sort : 'order'">
         <div [ngSwitch]="column.type">
+          <div *ngSwitchCase="'text'">
+            <div [ngSwitch]="column.format">
+              <div *ngSwitchCase="'url'">
+                <span *ngIf="data[column.field]">
+                  <a target="_blank" [href]="data[column.field]">
+                    {{ data[column.field] }}
+                  </a>
+                  <sup
+                    ><i
+                      class="pi pi-external-link"
+                      style="font-size: 0.75rem"
+                    ></i
+                  ></sup>
+                </span>
+              </div>
+              <div *ngSwitchDefault>{{ data[column.field] }}</div>
+            </div>
+          </div>
           <div *ngSwitchCase="'date'">
-            <span [pTooltip]="(data[column.field] | date : 'longTime')!">
-              {{ data[column.field] | date : "longDate" }}
+            <span
+              [pTooltip]="(data[column.field] | date : column.hoverFormat)!"
+            >
+              {{ data[column.field] | date : column.format }}
             </span>
           </div>
+          <div *ngSwitchCase="'boolean'">
+            <div *ngIf="data[column.field]; else falseBlock">
+              <i class="pi pi-check" style="color: var(--green-600)"></i>
+            </div>
+
+            <ng-template #falseBlock>
+              <i class="pi pi-times" style="color: var(--red-600)"></i>
+            </ng-template>
+          </div>
+          <div *ngSwitchCase="'numeric'">
+            <div [ngSwitch]="column.format">
+              <div *ngSwitchCase="'currency'">
+                {{ data[column.field] | currency:'USD':true:'1.0-0' }}
+              </div>
+              <div *ngSwitchCase="'whole'">
+                {{ data[column.field] | number : "1.0-0" }}
+              </div>
+              <div *ngSwitchDefault>{{ data[column.field] }}</div>
+            </div>
+          </div>
           <div *ngSwitchDefault>{{ data[column.field] }}</div>
+        </div>
+      </td>
+      <td *ngIf="actions.length > 0">
+        <div *ngFor="let action of actions | sort : 'order'">
+          <div [ngSwitch]="action.type">
+            <div *ngSwitchCase="'icon'">
+              <button
+                pButton
+                [class]="action.class"
+                [icon]="action.icon"
+                (click)="onActionClicked(action.id, data)"
+              ></button>
+            </div>
+            <div *ngSwitchCase="'label'">
+              NOT IMPLEMENTED
+            </div>
+          </div>
         </div>
       </td>
     </tr>
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td class="text-center" [attr.colspan]="columns.length">
+      <td class="text-center" [attr.colspan]="selectedColumns.length">
         {{ emptyMessage }}
       </td>
     </tr>

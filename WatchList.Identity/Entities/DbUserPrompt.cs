@@ -6,7 +6,7 @@ using WatchList.Identity.Enums;
 namespace WatchList.Identity.Entities
 {
     [Table("UserPrompt")]
-    public class DbUserPrompt : IEntity
+    public class DbUserPrompt : IIdEntity
     {
         public virtual DbUser User { get; set; }
 

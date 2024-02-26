@@ -6,7 +6,7 @@ using WatchList.Core.Interfaces;
 
 namespace WatchList.Core.Repositories
 {
-    public class EfRepository<TEntity, TContext> : IAsyncRepository<TEntity> where TEntity : class, IEntity where TContext : DbContext
+    public class EfRepository<TEntity, TContext> : IAsyncRepository<TEntity> where TEntity : class, IIdEntity where TContext : DbContext
     {
         public readonly TContext Context;
 

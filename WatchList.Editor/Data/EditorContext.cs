@@ -32,7 +32,6 @@ namespace WatchList.Editor.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=WatchList;Integrated Security=True;TrustServerCertificate=True");
             optionsBuilder
                 .UseLazyLoadingProxies();
             base.OnConfiguring(optionsBuilder);

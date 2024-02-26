@@ -1,14 +1,20 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { Collection } from 'api-client';
 import { LazyLoadEvent } from 'primeng/api';
 import { AppState } from 'projects/website/src/app/app.state';
-import { DataTableColumn } from '../../../components/data-table/data-table.component';
+import { ActionClickEvent } from '../../../components/data-table/models/action-click-event.interface';
+import { DataTableAction } from '../../../components/data-table/models/data-table-action.interface';
+import { DataTableColumn } from '../../../components/data-table/models/data-table-column.interface';
 import { loadCollections } from '../../../state/collections/collections.action';
 import {
   getCollections,
   getCollectionsTotal,
 } from '../../../state/collections/collections.selectors';
 import { LazyLoadToPaginationRequest } from '../../../utils/lazy-load-converter';
+
+const VIEW_COLLECTION: string = 'ViewCollection';
 
 @Component({
   selector: 'editor-collections-list-data-table',
@@ -20,13 +26,36 @@ export class CollectionsListDataTableComponent {
   public total$ = this.store.select(getCollectionsTotal);
 
   columns: DataTableColumn[] = [];
+  actions: DataTableAction[] = [];
 
   onDataLoad(event: LazyLoadEvent) {
     let request = LazyLoadToPaginationRequest(event);
     this.store.dispatch(loadCollections({ request }));
   }
 
-  constructor(private store: Store<AppState>) {
+  onActionClick({ actionId, data }: ActionClickEvent<Collection>) {
+    switch (actionId) {
+      case VIEW_COLLECTION:
+        this.onViewCollection(data);
+        break;
+    }
+  }
+
+  onViewCollection(collection: Collection) {
+    this.router.navigate(['/', 'editor', 'collections', collection.id]);
+  }
+
+  constructor(private store: Store<AppState>, private router: Router) {
+    this.actions = [
+      {
+        id: VIEW_COLLECTION,
+        type: 'icon',
+        icon: 'pi pi-arrow-right',
+        class: 'p-button-primary',
+        order: 1,
+        visible: true,
+      },
+    ];
     this.columns = [
       {
         caption: 'Name',
@@ -34,6 +63,8 @@ export class CollectionsListDataTableComponent {
         type: 'text',
         filterable: false,
         sortable: true,
+        visible: true,
+        order: 1,
       },
       {
         caption: 'Created On',
@@ -41,6 +72,10 @@ export class CollectionsListDataTableComponent {
         type: 'date',
         filterable: false,
         sortable: true,
+        visible: true,
+        order: 2,
+        format: 'longDate',
+        hoverFormat: 'longTime',
       },
       {
         caption: 'Modified On',
@@ -48,6 +83,10 @@ export class CollectionsListDataTableComponent {
         type: 'date',
         filterable: false,
         sortable: true,
+        visible: true,
+        order: 3,
+        format: 'longDate',
+        hoverFormat: 'longTime',
       },
     ];
   }

@@ -3386,7 +3386,7 @@ export interface Credit {
     character?: string | undefined;
     gender?: string | undefined;
     name?: string | undefined;
-    order?: number;
+    order?: number | undefined;
     type?: string | undefined;
     createdOn?: Date;
     modifiedOn?: Date;
@@ -3494,6 +3494,7 @@ export interface KeywordsResponse {
 
 export interface Language {
     id?: string;
+    iso?: string | undefined;
     name?: string | undefined;
     createdOn?: Date;
     modifiedOn?: Date;
@@ -3519,12 +3520,20 @@ export interface LogoutResponse {
 
 export interface Movie {
     id?: string;
+    adult?: boolean | undefined;
+    budget?: number | undefined;
+    homepage?: string | undefined;
+    language?: Language;
+    collection?: Collection;
+    originalTitle?: string | undefined;
+    overview?: string | undefined;
+    releaseDate?: Date | undefined;
+    revenue?: number | undefined;
+    runtime?: number | undefined;
+    tagLine?: string | undefined;
+    title?: string | undefined;
     createdOn?: Date;
     modifiedOn?: Date;
-    title?: string | undefined;
-    overview?: string | undefined;
-    releaseDate?: Date;
-    runtime?: number;
 }
 
 export interface MovieResponse {

@@ -2862,7 +2862,8 @@
           },
           "order": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "type": {
             "type": "string",
@@ -3169,6 +3170,10 @@
             "type": "string",
             "format": "uuid"
           },
+          "iso": {
+            "type": "string",
+            "nullable": true
+          },
           "name": {
             "type": "string",
             "nullable": true
@@ -3245,15 +3250,26 @@
             "type": "string",
             "format": "uuid"
           },
-          "createdOn": {
-            "type": "string",
-            "format": "date-time"
+          "adult": {
+            "type": "boolean",
+            "nullable": true
           },
-          "modifiedOn": {
-            "type": "string",
-            "format": "date-time"
+          "budget": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           },
-          "title": {
+          "homepage": {
+            "type": "string",
+            "nullable": true
+          },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
+          "collection": {
+            "$ref": "#/components/schemas/Collection"
+          },
+          "originalTitle": {
             "type": "string",
             "nullable": true
           },
@@ -3263,11 +3279,34 @@
           },
           "releaseDate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
+          },
+          "revenue": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
           },
           "runtime": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
+          },
+          "tagLine": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false

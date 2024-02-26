@@ -4,10 +4,10 @@ using WatchList.Core.Entities.Interfaces;
 namespace WatchList.Editor.Entities
 {
     [Table("Genre")]
-    public class DbGenre : IEntity
+    public class DbGenre : IIdEntity
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }

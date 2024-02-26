@@ -49,8 +49,8 @@ void ConfigureServices()
     services.AddTransient<ITokenService, TokenService>();
     services.AddTransient<IEmailService, EmailService>();
 
-    services.AddScoped(typeof(IAsyncRepository<IEntity>), typeof(EfRepository<IEntity,EditorContext>));
-    services.AddScoped(typeof(IAsyncRepository<IEntity>), typeof(EfRepository<IEntity, IdentityContext>));
+    services.AddScoped(typeof(IAsyncRepository<IIdEntity>), typeof(EfRepository<IIdEntity,EditorContext>));
+    services.AddScoped(typeof(IAsyncRepository<IIdEntity>), typeof(EfRepository<IIdEntity, IdentityContext>));
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<IUserPromptRepository, UserPromptRepository>();
     services.AddScoped<IUserTokenRepository, UserTokenRepository>();
@@ -166,51 +166,55 @@ void ConfigureApp()
 {
     var app = builder.Build();
 
-    using (var scope =
-           ((IApplicationBuilder) app).ApplicationServices.CreateScope())
+    if (false)
     {
-        using (var context = scope.ServiceProvider.GetService<EditorContext>())
+        using (var scope =
+       ((IApplicationBuilder)app).ApplicationServices.CreateScope())
         {
-            context?.Database.EnsureDeleted();
-            context?.Database.EnsureCreated();
-
-            context?.SaveChanges();
-        }
-        using (var context = scope.ServiceProvider.GetService<IdentityContext>())
-        {
-            var databaseCreator = context?.GetService<IRelationalDatabaseCreator>();
-            databaseCreator?.CreateTables();
-
-            context?.Database.EnsureCreated();
-
-
-            context?.Users.Add(new DbUser
+            using (var context = scope.ServiceProvider.GetService<EditorContext>())
             {
-                Id = new Guid("4081aaed-9ac8-4a3b-9fda-08da53098d50"),
-                EmailAddress = "admin@watch-list.com",
-                Name = "Admin",
-                PasswordAttempts = 0,
-                IsAdmin = true,
-                Password = "6LaWQkPDI1473yabhnmI7+Wmm4PZF/XVoQ2AGKo07NlVv7Zy4tMcqeVbg86z4VCtbpLGBscyjuZo53kHivnck/DhbfTux1CozF+mjFlHxeibrD1NWabyToqGEaKfPSRzPgW95u6fC99pXOVkvE9bauI676yYkWlh6GxbzHDjJ/KjqOjV+TvmWp2W/zHwz7BasDQ/QbzSWX2eGmaZR6x3U70Xycbs33TNE8xqsx2gbCx8pt4z931nsjXAh5FgO4/ZYWwEeq+xCMMGWX18w8TDGA9Brpk3g44B3R8mdHiTbKNuyuvpTu2bnYyxu2zLbmBEIIXwk564jyGnlzU0bmidig==",
-                PasswordSalt = "Ut0cFgpT1f7VZn75PlLIeut05KBKRsVq3RUACSgnkZxq2HTTgZc36a9q5UzaKjMYWmCM7Yzjtc6s5lZz+7IRmHfG1I2wJuItW7U70p4rxBfF/1sopJXrf2gAnY98DXPxDyZEpg3pKq+JJ/NCO00BPHEEBC0y8ITPLP/jBXsGyKk=",
-                Status = DbUserStatusTypeEnum.Active,
-            });
+                //context?.Database.EnsureDeleted();
+                //context?.Database.EnsureCreated();
 
-            context?.Users.Add(new DbUser
+                //context?.SaveChanges();
+            }
+            using (var context = scope.ServiceProvider.GetService<IdentityContext>())
             {
-                Id = new Guid("5f839195-8126-4a93-9a0f-0ba40866cdf8"),
-                EmailAddress = "user@watch-list.com",
-                Name = "User",
-                PasswordAttempts = 0,
-                IsAdmin = false,
-                Password = "6LaWQkPDI1473yabhnmI7+Wmm4PZF/XVoQ2AGKo07NlVv7Zy4tMcqeVbg86z4VCtbpLGBscyjuZo53kHivnck/DhbfTux1CozF+mjFlHxeibrD1NWabyToqGEaKfPSRzPgW95u6fC99pXOVkvE9bauI676yYkWlh6GxbzHDjJ/KjqOjV+TvmWp2W/zHwz7BasDQ/QbzSWX2eGmaZR6x3U70Xycbs33TNE8xqsx2gbCx8pt4z931nsjXAh5FgO4/ZYWwEeq+xCMMGWX18w8TDGA9Brpk3g44B3R8mdHiTbKNuyuvpTu2bnYyxu2zLbmBEIIXwk564jyGnlzU0bmidig==",
-                PasswordSalt = "Ut0cFgpT1f7VZn75PlLIeut05KBKRsVq3RUACSgnkZxq2HTTgZc36a9q5UzaKjMYWmCM7Yzjtc6s5lZz+7IRmHfG1I2wJuItW7U70p4rxBfF/1sopJXrf2gAnY98DXPxDyZEpg3pKq+JJ/NCO00BPHEEBC0y8ITPLP/jBXsGyKk=",
-                Status = DbUserStatusTypeEnum.Active,
-            });
+                var databaseCreator = context?.GetService<IRelationalDatabaseCreator>();
+                databaseCreator?.CreateTables();
 
-            context?.SaveChanges();
+                context?.Database.EnsureCreated();
+
+
+                context?.Users.Add(new DbUser
+                {
+                    Id = new Guid("4081aaed-9ac8-4a3b-9fda-08da53098d50"),
+                    EmailAddress = "admin@watch-list.com",
+                    Name = "Admin",
+                    PasswordAttempts = 0,
+                    IsAdmin = true,
+                    Password = "6LaWQkPDI1473yabhnmI7+Wmm4PZF/XVoQ2AGKo07NlVv7Zy4tMcqeVbg86z4VCtbpLGBscyjuZo53kHivnck/DhbfTux1CozF+mjFlHxeibrD1NWabyToqGEaKfPSRzPgW95u6fC99pXOVkvE9bauI676yYkWlh6GxbzHDjJ/KjqOjV+TvmWp2W/zHwz7BasDQ/QbzSWX2eGmaZR6x3U70Xycbs33TNE8xqsx2gbCx8pt4z931nsjXAh5FgO4/ZYWwEeq+xCMMGWX18w8TDGA9Brpk3g44B3R8mdHiTbKNuyuvpTu2bnYyxu2zLbmBEIIXwk564jyGnlzU0bmidig==",
+                    PasswordSalt = "Ut0cFgpT1f7VZn75PlLIeut05KBKRsVq3RUACSgnkZxq2HTTgZc36a9q5UzaKjMYWmCM7Yzjtc6s5lZz+7IRmHfG1I2wJuItW7U70p4rxBfF/1sopJXrf2gAnY98DXPxDyZEpg3pKq+JJ/NCO00BPHEEBC0y8ITPLP/jBXsGyKk=",
+                    Status = DbUserStatusTypeEnum.Active,
+                });
+
+                context?.Users.Add(new DbUser
+                {
+                    Id = new Guid("5f839195-8126-4a93-9a0f-0ba40866cdf8"),
+                    EmailAddress = "user@watch-list.com",
+                    Name = "User",
+                    PasswordAttempts = 0,
+                    IsAdmin = false,
+                    Password = "6LaWQkPDI1473yabhnmI7+Wmm4PZF/XVoQ2AGKo07NlVv7Zy4tMcqeVbg86z4VCtbpLGBscyjuZo53kHivnck/DhbfTux1CozF+mjFlHxeibrD1NWabyToqGEaKfPSRzPgW95u6fC99pXOVkvE9bauI676yYkWlh6GxbzHDjJ/KjqOjV+TvmWp2W/zHwz7BasDQ/QbzSWX2eGmaZR6x3U70Xycbs33TNE8xqsx2gbCx8pt4z931nsjXAh5FgO4/ZYWwEeq+xCMMGWX18w8TDGA9Brpk3g44B3R8mdHiTbKNuyuvpTu2bnYyxu2zLbmBEIIXwk564jyGnlzU0bmidig==",
+                    PasswordSalt = "Ut0cFgpT1f7VZn75PlLIeut05KBKRsVq3RUACSgnkZxq2HTTgZc36a9q5UzaKjMYWmCM7Yzjtc6s5lZz+7IRmHfG1I2wJuItW7U70p4rxBfF/1sopJXrf2gAnY98DXPxDyZEpg3pKq+JJ/NCO00BPHEEBC0y8ITPLP/jBXsGyKk=",
+                    Status = DbUserStatusTypeEnum.Active,
+                });
+
+                context?.SaveChanges();
+            }
         }
     }
+
 
 
 

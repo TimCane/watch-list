@@ -5,7 +5,7 @@
   <div
     class="relative flex flex-column flex-1 min-h-0 pt-0 border-right-1 border-100 surface-50"
   >
-    <div class="flex flex-column overflow-y-auto lg:hidden">
+    <div class="flex flex-column lg:hidden">
       <div class="mt-5 px-2 py-2 lg:mt-9 lg:px-3">
         <span class="p-input-icon-left w-full">
           <i class="pi pi-search"></i>
@@ -22,7 +22,7 @@
 </aside>
 
 <div
-  class="fixed bottom-0 top-0 left-0 right-0 surface-200 z-3"
+  class="fixed bottom-0 top-0 left-0 right-0 surface-overlay z-3 opacity-50"
   [ngClass]="{ fixed: toggle, hidden: !toggle }"
   (click)="toggleSidebar()"
 ></div>

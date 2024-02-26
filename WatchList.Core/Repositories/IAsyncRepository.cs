@@ -4,7 +4,7 @@ using WatchList.Core.Interfaces;
 
 namespace WatchList.Core.Repositories
 {
-    public interface IAsyncRepository<TEntity> where TEntity : IEntity
+    public interface IAsyncRepository<TEntity> where TEntity : IIdEntity
     {
         ValueTask<TEntity?> GetById(Guid id);
         Task<TEntity?> FirstOrDefault(Expression<Func<TEntity, bool>> predicate);

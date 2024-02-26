@@ -5,32 +5,55 @@ using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using WatchList.Editor.Access;
 using WatchList.Editor.Data;
 using WatchList.Editor.Entities;
 using WatchList.Editor.Enums;
 using WatchList.Editor.Models;
 using WatchList.Seed.Models;
 
-var sw = new Stopwatch();
-sw.Start();
-var csvMoviesRaw = GetMovies();
-sw.Stop();
-Console.WriteLine($"Movies ({csvMoviesRaw.Count}): {sw.ElapsedMilliseconds / 1000} seconds");
 
+var csvMoviesTask = new Task<List<CsvMovie>>(() =>
+{
+    var sw = new Stopwatch();
+    sw.Start();
+    var csvMoviesRaw = GetMovies();
+    sw.Stop();
+    Console.WriteLine($"Movies ({csvMoviesRaw.Count}): {sw.ElapsedMilliseconds / 1000} seconds");
 
-sw.Start();
-var csvCreditsRaw = GetCredits();
-sw.Stop();
-Console.WriteLine($"Credits ({csvCreditsRaw.Count}): {sw.ElapsedMilliseconds / 1000} seconds");
+    return csvMoviesRaw;
+});
 
+var csvCreditsTask = new Task<List<CsvCredit>>(() =>
+{
+    var sw = new Stopwatch();
+    sw.Start();
+    var csvCreditsRaw = GetCredits();
+    sw.Stop();
+    Console.WriteLine($"Credits ({csvCreditsRaw.Count}): {sw.ElapsedMilliseconds / 1000} seconds");
 
-sw.Start();
-var csvKeywordsRaw = GetKeywords();
-sw.Stop();
-Console.WriteLine($"Keywords ({csvKeywordsRaw.Count}): {sw.ElapsedMilliseconds / 1000} seconds");
+    return csvCreditsRaw;
+});
 
+var csvKeywordsTask = new Task<List<CsvKeyword>>(() =>
+{
+    var sw = new Stopwatch();
+    sw.Start();
+    var csvKeywordsRaw = GetKeywords();
+    sw.Stop();
+    Console.WriteLine($"Keywords ({csvKeywordsRaw.Count}): {sw.ElapsedMilliseconds / 1000} seconds");
 
-ParseIntoDb(csvMoviesRaw, csvCreditsRaw, csvKeywordsRaw);
+    return csvKeywordsRaw;
+});
+
+csvMoviesTask.Start();
+csvCreditsTask.Start();
+csvKeywordsTask.Start();
+
+await Task.WhenAll(csvMoviesTask, csvCreditsTask, csvKeywordsTask);
+
+ParseIntoDb(csvMoviesTask.Result, csvCreditsTask.Result, csvKeywordsTask.Result);
 
 void ParseIntoDb(List<CsvMovie> csvMovies, List<CsvCredit> csvCredits, List<CsvKeyword> csvKeywords)
 {
@@ -43,7 +66,7 @@ void ParseIntoDb(List<CsvMovie> csvMovies, List<CsvCredit> csvCredits, List<CsvK
     var productionCompanies = new Dictionary<int, DbProductionCompany>();
     var productionCountries = new Dictionary<string, DbProductionCountry>();
 
-    using var db = new EditorContext(new DbContextOptions<EditorContext>());
+    using var db = new EditorContext(new DbContextOptions<EditorContext>() {});
 
     db?.Database.EnsureDeleted();
     db?.Database.EnsureCreated();
@@ -62,6 +85,12 @@ void ParseIntoDb(List<CsvMovie> csvMovies, List<CsvCredit> csvCredits, List<CsvK
             Overview = row.overview,
             ReleaseDate = row.release_date,
             Runtime = Convert.ToInt32(row.runtime),
+            Adult = row.adult,
+            Budget = row.budget,
+            Homepage = row.homepage,
+            OriginalTitle = row.original_title,
+            Revenue = row.revenue,
+            TagLine = row.tagline,
             Title = row.title,
             Credits = new List<DbMovieCredit>(),
             Genres = new List<DbMovieGenre>(),
@@ -119,7 +148,7 @@ void ParseIntoDb(List<CsvMovie> csvMovies, List<CsvCredit> csvCredits, List<CsvK
                 collections.Add(row.belongs_to_collection.id, dbCollection);
             }
 
-            //movie.Collection = dbCollection;
+            movie.Collection = dbCollection;
         }
 
         if (row.spoken_languages != null)
@@ -149,6 +178,12 @@ void ParseIntoDb(List<CsvMovie> csvMovies, List<CsvCredit> csvCredits, List<CsvK
                     MovieId = movie.Id,
                 });
             }
+        }
+        
+        var originalLanguage = languages.Values.FirstOrDefault(l => l.Iso == row.original_language);
+        if (originalLanguage != null)
+        {
+            movie.Language = originalLanguage;
         }
 
         if (row.production_companies != null)
@@ -235,24 +270,15 @@ void ParseIntoDb(List<CsvMovie> csvMovies, List<CsvCredit> csvCredits, List<CsvK
                 keywords.Add(keyword.id, dbKeyword);
             }
 
-            var existingDbMovieKeyword = db.MovieKeywords.FirstOrDefault(m => m.KeywordId == dbKeyword.Id && m.MovieId == movie.Id);
-            if (existingDbMovieKeyword != null)
+            db.MovieKeywords.Add(new DbMovieKeyword()
             {
-                Console.WriteLine($"DUPE: Keyword - Movie: {movie.Title}, Keyword: {dbKeyword.Name}");
-            }
-            else
-            {
-                db.MovieKeywords.Add(new DbMovieKeyword()
-                {
-                    KeywordId = dbKeyword.Id,
-                    MovieId = movie.Id,
-                });
-            }
-
+                KeywordId = dbKeyword.Id,
+                MovieId = movie.Id,
+            });
         }
     }
-
-    db.SaveChanges();
+    var added = new Dictionary<(Guid movieId, int creditId), DbCredit>();
+    var skipped = new Dictionary<(Guid movieId, int creditId), DbCredit>();
 
     foreach (var row in csvCredits)
     {
@@ -262,6 +288,8 @@ void ParseIntoDb(List<CsvMovie> csvMovies, List<CsvCredit> csvCredits, List<CsvK
         }
 
         var movie = movies[row.id];
+
+
 
         foreach (var crew in row.crew)
         {
@@ -284,18 +312,19 @@ void ParseIntoDb(List<CsvMovie> csvMovies, List<CsvCredit> csvCredits, List<CsvK
                 credits.Add(crew.id, dbCredit);
             }
 
-            var existingDbMovieCredit = db.MovieCredits.FirstOrDefault(m => m.CreditId == dbCredit.Id && m.MovieId == movie.Id);
-            if (existingDbMovieCredit != null)
+            if (!added.ContainsKey((movie.Id, crew.id)))
             {
-                Console.WriteLine($"DUPE: Keyword - Movie: {movie.Title}, Keyword: {dbCredit.Name}");
-            }
-            else
-            {
+                added.Add((movie.Id, crew.id), dbCredit);
+
                 db.MovieCredits.Add(new DbMovieCredit()
                 {
                     CreditId = dbCredit.Id,
                     MovieId = movie.Id,
                 });
+            }
+            else
+            {
+                skipped.TryAdd((movie.Id, crew.id), dbCredit);
             }
         }
 
@@ -321,20 +350,23 @@ void ParseIntoDb(List<CsvMovie> csvMovies, List<CsvCredit> csvCredits, List<CsvK
                 credits.Add(cast.id, dbCredit);
             }
 
-            var existingDbMovieCredit = db.MovieCredits.FirstOrDefault(m => m.CreditId == dbCredit.Id && m.MovieId == movie.Id);
-            if (existingDbMovieCredit != null)
+            if (!added.ContainsKey((movie.Id, cast.id)))
             {
-                Console.WriteLine($"DUPE: Keyword - Movie: {movie.Title}, Keyword: {dbCredit.Name}");
-            }
-            else
-            {
+                added.Add((movie.Id, cast.id), dbCredit);
+
                 db.MovieCredits.Add(new DbMovieCredit()
                 {
                     CreditId = dbCredit.Id,
                     MovieId = movie.Id,
                 });
             }
+            else
+            {
+                skipped.TryAdd((movie.Id, cast.id), dbCredit);
+            }
         }
+
+        var b = 10;
     }
     
     db.SaveChanges();
@@ -523,7 +555,7 @@ List<CsvMovie> GetMovies()
                     // adult
                     if (col == 1)
                     {
-                        movie.adult = field;
+                        movie.adult = Convert.ToBoolean(field);
                     }
                     // belongs_to_collection
                     if (col == 2)
@@ -533,7 +565,7 @@ List<CsvMovie> GetMovies()
                     // budget
                     if (col == 3)
                     {
-                        movie.budget = field;
+                        movie.budget = Convert.ToInt32(field);
                     }
                     // genres
                     if (col == 4)
@@ -598,7 +630,7 @@ List<CsvMovie> GetMovies()
                     // revenue
                     if (col == 16)
                     {
-                        movie.revenue = field;
+                        movie.revenue = Convert.ToInt64(field);
                     }
                     // runtime
                     if (col == 17)

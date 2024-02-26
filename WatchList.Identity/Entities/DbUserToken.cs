@@ -5,7 +5,7 @@ namespace WatchList.Identity.Entities
 {
 
     [Table("UserToken")]
-    public class DbUserToken : IEntity
+    public class DbUserToken : IIdEntity
     {
         public virtual DbUser User { get; set; }
 

@@ -10,7 +10,7 @@ namespace WatchList.Core.Models
         [JsonPropertyName("skip")]
         public int Skip { get; set; }
 
-        [Range(1, 10)]
+        [Range(1, 50)]
         [JsonPropertyName("take")]
         public int Take { get; set; }
 

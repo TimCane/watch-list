@@ -4,7 +4,7 @@ using WatchList.Core.Entities.Interfaces;
 namespace WatchList.Editor.Entities
 {
     [Table("MovieKeyword")]
-    public class DbMovieKeyword : IManyToManyEntity
+    public class DbMovieKeyword : IEntity
     {
         public Guid MovieId { get; set; }
         public Guid KeywordId { get; set; }

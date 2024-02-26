@@ -28,7 +28,7 @@ namespace WatchList.Core.Data
         {
             var entries = ChangeTracker
             .Entries()
-                .Where(e => e.Entity is IEntity && e.State is EntityState.Added or EntityState.Modified);
+                .Where(e => e is {Entity: IEntity, State: EntityState.Added or EntityState.Modified});
 
             foreach (var entityEntry in entries)
             {

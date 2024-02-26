@@ -6,7 +6,7 @@ using WatchList.Identity.Enums;
 namespace WatchList.Identity.Entities
 {
     [Table("User")]
-    public class DbUser : IEntity
+    public class DbUser : IIdEntity
     {
         public string EmailAddress { get; set; }
 

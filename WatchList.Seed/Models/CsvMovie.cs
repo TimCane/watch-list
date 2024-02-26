@@ -2,30 +2,30 @@
 {
     internal class CsvMovie
     {
-        public string adult { get; set; } //False,
+        public bool? adult { get; set; } //False,
         public CollectionItem? belongs_to_collection { get; set; }
-        public string budget { get; set; } //30000000
+        public int? budget { get; set; } //30000000
         public List<GenreItem>? genres { get; set; } 
-        public string homepage { get; set; } //http://toystory.disney.com/toy-story,
+        public string? homepage { get; set; } //http://toystory.disney.com/toy-story,
         public int id { get; set; }
-        public string imdb_id { get; set; }
-        public string original_language { get; set; }
-        public string original_title { get; set; }
-        public string overview { get; set; } 
-        public string popularity { get; set; }
-        public string poster_path { get; set; }
+        public string? imdb_id { get; set; }
+        public string? original_language { get; set; }
+        public string? original_title { get; set; }
+        public string? overview { get; set; } 
+        public string? popularity { get; set; }
+        public string? poster_path { get; set; }
         public List<ProductionCompanyItem>? production_companies { get; set; }
         public List<ProductionCountryItem>? production_countries { get; set; } 
-        public DateTime release_date { get; set; }
-        public string revenue { get; set; }
-        public decimal runtime { get; set; }
+        public DateTime? release_date { get; set; }
+        public long? revenue { get; set; }
+        public decimal? runtime { get; set; }
         public List<LanguageItem>? spoken_languages { get; set; } 
-        public string status { get; set; }
-        public string tagline { get; set; } 
-        public string title { get; set; }
-        public string video { get; set; }
-        public string vote_average { get; set; }
-        public string vote_count { get; set; }
+        public string? status { get; set; }
+        public string? tagline { get; set; } 
+        public string? title { get; set; }
+        public string? video { get; set; }
+        public string? vote_average { get; set; }
+        public string? vote_count { get; set; }
     }
 
     public class CollectionItem

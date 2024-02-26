@@ -11,7 +11,8 @@
         [total]="state.total"
         [columns]="columns"
         [actions]="actions"
-        (onLoadData)="onDataLoad($event)"
+        (onLoadData)="onDataLoad($event)"        
+        (onActionClick)="onActionClick($event)"
       >
       </editor-data-table>
     </div>

@@ -78,6 +78,15 @@ export class KeywordsListDataTableComponent {
         hoverFormat: 'longTime',
       },
       {
+        caption: 'Created By',
+        field: 'createdBy',
+        type: 'text',
+        filterable: false,
+        sortable: true,
+        visible: false,
+        order: 2,
+      },
+      {
         caption: 'Modified On',
         field: 'modifiedOn',
         type: 'date',
@@ -87,6 +96,15 @@ export class KeywordsListDataTableComponent {
         order: 3,
         format: 'longDate',
         hoverFormat: 'longTime',
+      },
+      {
+        caption: 'Modified By',
+        field: 'modifiedBy',
+        type: 'text',
+        filterable: false,
+        sortable: true,
+        visible: false,
+        order: 3,
       },
     ];
   }

@@ -1,13 +1,13 @@
-﻿using WatchList.Core.Repositories;
-using WatchList.Editor.Data;
-using WatchList.Editor.Entities;
+﻿using WatchList.Core.Data;
+using WatchList.Core.Entities.Editor;
+using WatchList.Core.Repositories;
 using WatchList.Editor.Repositories.Interfaces;
 
 namespace WatchList.Editor.Repositories
 {
-    public class ProductionCompanyRepository : EfRepository<DbProductionCompany, EditorContext>, IProductionCompanyRepository
+    public class ProductionCompanyRepository : EfRepository<DbProductionCompany, DatabaseContext>, IProductionCompanyRepository
     {
-        public ProductionCompanyRepository(EditorContext context) : base(context)
+        public ProductionCompanyRepository(DatabaseContext context) : base(context)
         {
         }
     }

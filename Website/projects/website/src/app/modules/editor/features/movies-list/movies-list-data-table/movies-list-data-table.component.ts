@@ -165,6 +165,15 @@ export class MoviesListDataTableComponent {
         hoverFormat: 'longTime',
       },
       {
+        caption: 'Created By',
+        field: 'createdBy',
+        type: 'text',
+        filterable: false,
+        sortable: true,
+        visible: false,
+        order: 10,
+      },
+      {
         caption: 'Modified On',
         field: 'modifiedOn',
         type: 'date',
@@ -174,6 +183,15 @@ export class MoviesListDataTableComponent {
         order: 11,
         format: 'longDate',
         hoverFormat: 'longTime',
+      },
+      {
+        caption: 'Modified By',
+        field: 'modifiedBy',
+        type: 'text',
+        filterable: false,
+        sortable: true,
+        visible: false,
+        order: 11,
       },
     ];
   }

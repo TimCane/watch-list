@@ -1,15 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WatchList.Core.Data;
+using WatchList.Core.Entities.Identity;
+using WatchList.Core.Entities.Identity.Enums;
 using WatchList.Core.Repositories;
-using WatchList.Identity.Data;
-using WatchList.Identity.Entities;
-using WatchList.Identity.Enums;
+
 using WatchList.Identity.Repositories.Interfaces;
 
 namespace WatchList.Identity.Repositories
 {
-    public class UserPromptRepository : EfRepository<DbUserPrompt, IdentityContext>, IUserPromptRepository
+    public class UserPromptRepository : EfRepository<DbUserPrompt, DatabaseContext>, IUserPromptRepository
     {
-        public UserPromptRepository(IdentityContext context) : base(context)
+        public UserPromptRepository(DatabaseContext context) : base(context)
         {
         }
 

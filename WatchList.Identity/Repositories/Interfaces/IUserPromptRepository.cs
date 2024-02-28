@@ -1,5 +1,5 @@
-﻿using WatchList.Core.Repositories;
-using WatchList.Identity.Entities;
+﻿using WatchList.Core.Entities.Identity;
+using WatchList.Core.Repositories;
 
 namespace WatchList.Identity.Repositories.Interfaces
 {

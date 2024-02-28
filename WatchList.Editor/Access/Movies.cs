@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using WatchList.Core.Entities.Editor;
 using WatchList.Core.Exceptions;
 using WatchList.Core.Interfaces;
 using WatchList.Core.Models;
 using WatchList.Editor.Access.Interfaces;
-using WatchList.Editor.Entities;
 using WatchList.Editor.Models;
 using WatchList.Editor.Models.Requests;
 using WatchList.Editor.Models.Responses;
@@ -28,6 +28,20 @@ namespace WatchList.Editor.Access
             new(StringComparer.OrdinalIgnoreCase)
             {
                 { "Id", new OrderBy<DbMovie,Guid>(x => x.Id) },
+                { "Adult", new OrderBy<DbMovie,bool?>(x => x.Adult) },
+                { "Budget", new OrderBy<DbMovie,int?>(x => x.Budget) },
+                { "Homepage", new OrderBy<DbMovie,string?>(x => x.Homepage) },
+                { "OriginalTitle", new OrderBy<DbMovie, string?>(x => x.OriginalTitle) },
+                { "Overview", new OrderBy<DbMovie, string?>(x => x.Overview) },
+                { "ReleaseDate", new OrderBy<DbMovie, DateTime?>(x => x.ReleaseDate) },
+                { "Revenue", new OrderBy<DbMovie, long?>(x => x.Revenue) },
+                { "Runtime", new OrderBy<DbMovie, int?>(x => x.Runtime) },
+                { "TagLine", new OrderBy<DbMovie, string?>(x => x.TagLine) },
+                { "Title", new OrderBy<DbMovie, string?>(x => x.Title) },
+                { "CreatedOn", new OrderBy<DbMovie, DateTime>(x => x.CreatedOn) },
+                { "CreatedBy", new OrderBy<DbMovie, Guid>(x => x.CreatedBy) },
+                { "ModifiedOn", new OrderBy<DbMovie, DateTime>(x => x.ModifiedOn) },
+                { "ModifiedBy", new OrderBy<DbMovie, Guid>(x => x.ModifiedBy) },
             };
 
         public async Task<MoviesResponse> Get(User user, PagedRequest request)

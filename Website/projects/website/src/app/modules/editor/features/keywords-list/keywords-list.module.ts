@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ActionBarModule } from '../../components/action-bar/action-bar.module';
 import { KeywordsEffects } from '../../state/keywords/keywords.effect';
 import { keywordsReducer } from '../../state/keywords/keywords.reducer';
 import { KeywordsListDataTableModule } from './keywords-list-data-table/keywords-list-data-table.module';
@@ -16,6 +17,7 @@ import { KeywordsListComponent } from './keywords-list.component';
     CommonModule,
     KeywordsListRoutingModule,
     KeywordsListDataTableModule,
+    ActionBarModule,
     StoreModule.forFeature('keywordsFeature', keywordsReducer),
     EffectsModule.forFeature([KeywordsEffects]),
   ],

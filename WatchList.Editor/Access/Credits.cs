@@ -1,11 +1,12 @@
 using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using WatchList.Core.Entities.Editor;
+using WatchList.Core.Entities.Editor.Enums;
 using WatchList.Core.Exceptions;
 using WatchList.Core.Interfaces;
 using WatchList.Core.Models;
 using WatchList.Editor.Access.Interfaces;
-using WatchList.Editor.Entities;
 using WatchList.Editor.Models;
 using WatchList.Editor.Models.Requests;
 using WatchList.Editor.Models.Responses;
@@ -28,6 +29,15 @@ namespace WatchList.Editor.Access
             new(StringComparer.OrdinalIgnoreCase)
             {
                 { "Id", new OrderBy<DbCredit,Guid>(x => x.Id) },
+                { "Character", new OrderBy<DbCredit,string?>(x => x.Character) },
+                { "Gender", new OrderBy<DbCredit,DbCreditGenderEnum?>(x => x.Gender) },
+                { "Name", new OrderBy<DbCredit,string?>(x => x.Name) },
+                { "Order", new OrderBy<DbCredit,int?>(x => x.Order) },
+                { "Type", new OrderBy<DbCredit,DbCreditTypeEnum>(x => x.Type) },
+                { "CreatedOn", new OrderBy<DbCredit,DateTime>(x => x.CreatedOn) },
+                { "CreatedBy", new OrderBy<DbCredit,Guid>(x => x.CreatedBy) },
+                { "ModifiedOn", new OrderBy<DbCredit,DateTime>(x => x.ModifiedOn) },
+                { "ModifiedBy", new OrderBy<DbCredit,Guid>(x => x.ModifiedBy) },
             };
 
         public async Task<CreditsResponse> Get(User user, PagedRequest request)

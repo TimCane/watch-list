@@ -61,6 +61,10 @@ namespace WatchList.Core.Repositories
                     ? data.OrderBy(orderBy)
                     : data.OrderByDescending(orderBy);
             }
+            else
+            {
+                data = data.OrderBy(d => d.Id);
+            }
 
             if (skip.HasValue && take.HasValue)
             {

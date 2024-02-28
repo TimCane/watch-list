@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WatchList.Core.Data;
+using WatchList.Core.Entities.Identity;
 using WatchList.Core.Repositories;
-using WatchList.Identity.Data;
-using WatchList.Identity.Entities;
 using WatchList.Identity.Repositories.Interfaces;
 
 namespace WatchList.Identity.Repositories
 {
-    public class UserTokenRepository : EfRepository<DbUserToken, IdentityContext>, IUserTokenRepository
+    public class UserTokenRepository : EfRepository<DbUserToken, DatabaseContext>, IUserTokenRepository
     {
-        public UserTokenRepository(IdentityContext context) : base(context)
+        public UserTokenRepository(DatabaseContext context) : base(context)
         {
         }
 

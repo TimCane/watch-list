@@ -5,4 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './genre-detail.component.html',
   styleUrls: ['./genre-detail.component.scss'],
 })
-export class GenreDetailComponent {}
+export class GenreDetailComponent {
+  onSave() {}
+  onDelete() {}
+}

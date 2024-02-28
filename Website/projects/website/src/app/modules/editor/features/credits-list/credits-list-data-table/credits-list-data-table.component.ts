@@ -115,6 +115,15 @@ export class CreditsListDataTableComponent {
         hoverFormat: 'longTime',
       },
       {
+        caption: 'Created By',
+        field: 'createdBy',
+        type: 'text',
+        filterable: false,
+        sortable: true,
+        visible: false,
+        order: 6,
+      },
+      {
         caption: 'Modified On',
         field: 'modifiedOn',
         type: 'date',
@@ -124,6 +133,15 @@ export class CreditsListDataTableComponent {
         order: 7,
         format: 'longDate',
         hoverFormat: 'longTime',
+      },
+      {
+        caption: 'Modified By',
+        field: 'modifiedBy',
+        type: 'text',
+        filterable: false,
+        sortable: true,
+        visible: false,
+        order: 7,
       },
     ];
   }

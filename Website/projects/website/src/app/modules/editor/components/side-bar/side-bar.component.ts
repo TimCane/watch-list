@@ -8,10 +8,10 @@ import { MenuItem } from 'primeng/api';
 })
 export class SideBarComponent implements OnInit {
   @Input() toggle: boolean = false;
-  @Output() onSidebarToggled = new EventEmitter<void>();
+  @Output() onSidebarToggle = new EventEmitter<void>();
 
   toggleSidebar() {
-    this.onSidebarToggled.emit();
+    this.onSidebarToggle.emit();
   }
 
   items: MenuItem[] = [];

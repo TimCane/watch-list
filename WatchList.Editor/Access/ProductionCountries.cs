@@ -1,11 +1,11 @@
 using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using WatchList.Core.Entities.Editor;
 using WatchList.Core.Exceptions;
 using WatchList.Core.Interfaces;
 using WatchList.Core.Models;
 using WatchList.Editor.Access.Interfaces;
-using WatchList.Editor.Entities;
 using WatchList.Editor.Models;
 using WatchList.Editor.Models.Requests;
 using WatchList.Editor.Models.Responses;
@@ -28,6 +28,12 @@ namespace WatchList.Editor.Access
             new(StringComparer.OrdinalIgnoreCase)
             {
                 { "Id", new OrderBy<DbProductionCountry,Guid>(x => x.Id) },
+                { "Iso", new OrderBy<DbProductionCountry,string>(x => x.Iso) },
+                { "Name", new OrderBy<DbProductionCountry,string>(x => x.Name) },
+                { "CreatedOn", new OrderBy<DbProductionCountry,DateTime>(x => x.CreatedOn) },
+                { "ModifiedOn", new OrderBy<DbProductionCountry,DateTime>(x => x.ModifiedOn) },
+                { "CreatedBy", new OrderBy<DbProductionCountry,Guid>(x => x.CreatedBy) },
+                { "ModifiedBy", new OrderBy<DbProductionCountry,Guid>(x => x.ModifiedBy) },
             };
 
         public async Task<ProductionCountriesResponse> Get(User user, PagedRequest request)

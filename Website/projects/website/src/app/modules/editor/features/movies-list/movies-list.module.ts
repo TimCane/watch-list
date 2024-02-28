@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ActionBarModule } from '../../components/action-bar/action-bar.module';
 import { MoviesEffects } from '../../state/movies/movies.effect';
 import { moviesReducer } from '../../state/movies/movies.reducer';
 import { MoviesListDataTableModule } from './movies-list-data-table/movies-list-data-table.module';
@@ -16,6 +17,7 @@ import { MoviesListComponent } from './movies-list.component';
     CommonModule,
     MoviesListRoutingModule,
     MoviesListDataTableModule,
+    ActionBarModule,
     StoreModule.forFeature('moviesFeature', moviesReducer),
     EffectsModule.forFeature([MoviesEffects]),
   ],

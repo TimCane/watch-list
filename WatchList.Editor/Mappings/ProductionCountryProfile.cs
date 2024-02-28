@@ -1,5 +1,5 @@
 using AutoMapper;
-using WatchList.Editor.Entities;
+using WatchList.Core.Entities.Editor;
 using WatchList.Editor.Models;
 
 namespace WatchList.Editor.Mappings

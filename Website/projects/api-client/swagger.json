@@ -28,7 +28,7 @@
             "in": "query",
             "style": "form",
             "schema": {
-              "maximum": 10,
+              "maximum": 50,
               "minimum": 1,
               "type": "integer",
               "format": "int32"
@@ -290,7 +290,7 @@
             "in": "query",
             "style": "form",
             "schema": {
-              "maximum": 10,
+              "maximum": 50,
               "minimum": 1,
               "type": "integer",
               "format": "int32"
@@ -552,7 +552,7 @@
             "in": "query",
             "style": "form",
             "schema": {
-              "maximum": 10,
+              "maximum": 50,
               "minimum": 1,
               "type": "integer",
               "format": "int32"
@@ -814,7 +814,7 @@
             "in": "query",
             "style": "form",
             "schema": {
-              "maximum": 10,
+              "maximum": 50,
               "minimum": 1,
               "type": "integer",
               "format": "int32"
@@ -1076,7 +1076,7 @@
             "in": "query",
             "style": "form",
             "schema": {
-              "maximum": 10,
+              "maximum": 50,
               "minimum": 1,
               "type": "integer",
               "format": "int32"
@@ -1338,7 +1338,7 @@
             "in": "query",
             "style": "form",
             "schema": {
-              "maximum": 10,
+              "maximum": 50,
               "minimum": 1,
               "type": "integer",
               "format": "int32"
@@ -1600,7 +1600,7 @@
             "in": "query",
             "style": "form",
             "schema": {
-              "maximum": 10,
+              "maximum": 50,
               "minimum": 1,
               "type": "integer",
               "format": "int32"
@@ -1862,7 +1862,7 @@
             "in": "query",
             "style": "form",
             "schema": {
-              "maximum": 10,
+              "maximum": 50,
               "minimum": 1,
               "type": "integer",
               "format": "int32"
@@ -2657,9 +2657,17 @@
             "type": "string",
             "format": "date-time"
           },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "modifiedOn": {
             "type": "string",
             "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2873,9 +2881,17 @@
             "type": "string",
             "format": "date-time"
           },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "modifiedOn": {
             "type": "string",
             "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3044,9 +3060,17 @@
             "type": "string",
             "format": "date-time"
           },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "modifiedOn": {
             "type": "string",
             "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3111,9 +3135,17 @@
             "type": "string",
             "format": "date-time"
           },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "modifiedOn": {
             "type": "string",
             "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3182,9 +3214,17 @@
             "type": "string",
             "format": "date-time"
           },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "modifiedOn": {
             "type": "string",
             "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3263,12 +3303,6 @@
             "type": "string",
             "nullable": true
           },
-          "language": {
-            "$ref": "#/components/schemas/Language"
-          },
-          "collection": {
-            "$ref": "#/components/schemas/Collection"
-          },
           "originalTitle": {
             "type": "string",
             "nullable": true
@@ -3304,9 +3338,17 @@
             "type": "string",
             "format": "date-time"
           },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "modifiedOn": {
             "type": "string",
             "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3407,9 +3449,17 @@
             "type": "string",
             "format": "date-time"
           },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "modifiedOn": {
             "type": "string",
             "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3478,9 +3528,17 @@
             "type": "string",
             "format": "date-time"
           },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "modifiedOn": {
             "type": "string",
             "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3822,9 +3880,17 @@
             "type": "string",
             "format": "date-time"
           },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "modifiedOn": {
             "type": "string",
             "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

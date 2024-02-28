@@ -5,4 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './production-company-detail.component.html',
   styleUrls: ['./production-company-detail.component.scss'],
 })
-export class ProductionCompanyDetailComponent {}
+export class ProductionCompanyDetailComponent {
+  onSave() {}
+  onDelete() {}
+}

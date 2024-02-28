@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using WatchList.Core.Constants;
+using WatchList.Core.Entities.Identity;
+using WatchList.Core.Entities.Identity.Enums;
 using WatchList.Core.Exceptions;
 using WatchList.Core.Helpers;
 using WatchList.Core.Models;
 using WatchList.Core.Services.Interfaces;
 using WatchList.Core.Utils;
 using WatchList.Identity.Access.Interfaces;
-using WatchList.Identity.Entities;
-using WatchList.Identity.Enums;
 using WatchList.Identity.Models.Requests;
 using WatchList.Identity.Models.Responses;
 using WatchList.Identity.Repositories.Interfaces;

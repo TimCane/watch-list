@@ -92,6 +92,15 @@ export class ProductionCountriesListDataTableComponent {
         hoverFormat: 'longTime',
       },
       {
+        caption: 'Created By',
+        field: 'createdBy',
+        type: 'text',
+        filterable: false,
+        sortable: true,
+        visible: false,
+        order: 3,
+      },
+      {
         caption: 'Modified On',
         field: 'modifiedOn',
         type: 'date',
@@ -101,6 +110,15 @@ export class ProductionCountriesListDataTableComponent {
         order: 4,
         format: 'longDate',
         hoverFormat: 'longTime',
+      },
+      {
+        caption: 'Modified By',
+        field: 'modifiedBy',
+        type: 'text',
+        filterable: false,
+        sortable: true,
+        visible: false,
+        order: 4,
       },
     ];
   }

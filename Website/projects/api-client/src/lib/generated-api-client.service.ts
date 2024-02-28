@@ -3299,7 +3299,9 @@ export interface Collection {
     id?: string;
     name?: string | undefined;
     createdOn?: Date;
+    createdBy?: string | undefined;
     modifiedOn?: Date;
+    modifiedBy?: string | undefined;
 }
 
 export interface CollectionResponse {
@@ -3389,7 +3391,9 @@ export interface Credit {
     order?: number | undefined;
     type?: string | undefined;
     createdOn?: Date;
+    createdBy?: string | undefined;
     modifiedOn?: Date;
+    modifiedBy?: string | undefined;
 }
 
 export interface CreditResponse {
@@ -3454,7 +3458,9 @@ export interface Genre {
     id?: string;
     name?: string | undefined;
     createdOn?: Date;
+    createdBy?: string | undefined;
     modifiedOn?: Date;
+    modifiedBy?: string | undefined;
 }
 
 export interface GenreResponse {
@@ -3475,7 +3481,9 @@ export interface Keyword {
     id?: string;
     name?: string | undefined;
     createdOn?: Date;
+    createdBy?: string | undefined;
     modifiedOn?: Date;
+    modifiedBy?: string | undefined;
 }
 
 export interface KeywordResponse {
@@ -3497,7 +3505,9 @@ export interface Language {
     iso?: string | undefined;
     name?: string | undefined;
     createdOn?: Date;
+    createdBy?: string | undefined;
     modifiedOn?: Date;
+    modifiedBy?: string | undefined;
 }
 
 export interface LanguageResponse {
@@ -3523,8 +3533,6 @@ export interface Movie {
     adult?: boolean | undefined;
     budget?: number | undefined;
     homepage?: string | undefined;
-    language?: Language;
-    collection?: Collection;
     originalTitle?: string | undefined;
     overview?: string | undefined;
     releaseDate?: Date | undefined;
@@ -3533,7 +3541,9 @@ export interface Movie {
     tagLine?: string | undefined;
     title?: string | undefined;
     createdOn?: Date;
+    createdBy?: string | undefined;
     modifiedOn?: Date;
+    modifiedBy?: string | undefined;
 }
 
 export interface MovieResponse {
@@ -3564,7 +3574,9 @@ export interface ProductionCompany {
     id?: string;
     name?: string | undefined;
     createdOn?: Date;
+    createdBy?: string | undefined;
     modifiedOn?: Date;
+    modifiedBy?: string | undefined;
 }
 
 export interface ProductionCompanyResponse {
@@ -3586,7 +3598,9 @@ export interface ProductionCountry {
     iso?: string | undefined;
     name?: string | undefined;
     createdOn?: Date;
+    createdBy?: string | undefined;
     modifiedOn?: Date;
+    modifiedBy?: string | undefined;
 }
 
 export interface ProductionCountryResponse {
@@ -3712,7 +3726,9 @@ export interface User {
     name?: string | undefined;
     isAdmin?: boolean;
     createdOn?: Date;
+    createdBy?: string | undefined;
     modifiedOn?: Date;
+    modifiedBy?: string | undefined;
 }
 
 export interface WhoAmIResponse {

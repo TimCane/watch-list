@@ -6,6 +6,7 @@ import { StoreModule } from '@ngrx/store';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
 
+import { ActionBarModule } from '../../components/action-bar/action-bar.module';
 import { CollectionsEffects } from '../../state/collections/collections.effect';
 import { collectionsReducer } from '../../state/collections/collections.reducer';
 import { CollectionsListDataTableModule } from './collections-list-data-table/collections-list-data-table.module';
@@ -18,6 +19,7 @@ import { CollectionsListComponent } from './collections-list.component';
     CommonModule,
     CollectionsListRoutingModule,
     CollectionsListDataTableModule,
+    ActionBarModule,
     StoreModule.forFeature('collectionsFeature', collectionsReducer),
     EffectsModule.forFeature([CollectionsEffects]),
   ],

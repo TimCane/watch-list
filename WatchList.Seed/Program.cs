@@ -6,10 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using WatchList.Core.Data;
+using WatchList.Core.Entities.Editor;
+using WatchList.Core.Entities.Editor.Enums;
 using WatchList.Editor.Access;
-using WatchList.Editor.Data;
-using WatchList.Editor.Entities;
-using WatchList.Editor.Enums;
+
 using WatchList.Editor.Models;
 using WatchList.Seed.Models;
 
@@ -66,12 +67,7 @@ void ParseIntoDb(List<CsvMovie> csvMovies, List<CsvCredit> csvCredits, List<CsvK
     var productionCompanies = new Dictionary<int, DbProductionCompany>();
     var productionCountries = new Dictionary<string, DbProductionCountry>();
 
-    using var db = new EditorContext(new DbContextOptions<EditorContext>() {});
-
-    db?.Database.EnsureDeleted();
-    db?.Database.EnsureCreated();
-    
-    db?.SaveChanges();
+    using var db = new DatabaseContext(new DbContextOptions<DatabaseContext>() {}, null);
 
     foreach (var row in csvMovies)
     {

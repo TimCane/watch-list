@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using WatchList.Core.Entities.Identity;
 using WatchList.Core.Models;
-using WatchList.Identity.Entities;
 
 namespace WatchList.Identity.Mappings
 {

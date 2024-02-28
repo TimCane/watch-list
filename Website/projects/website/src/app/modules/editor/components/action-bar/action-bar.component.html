@@ -1,0 +1,29 @@
+<p-toolbar styleClass="mb-2">
+  <div class="p-toolbar-group-start">
+    <p-button
+      *ngIf="showNew"
+      label="New"
+      icon="pi pi-plus"
+      styleClass="p-button-secondary"
+      class="mr-2"
+      (onClick)="onNewClicked()"
+    ></p-button>
+    <p-button
+      *ngIf="showSave"
+      label="Save"
+      icon="pi pi-save"
+      class="mr-2"
+      (onClick)="onSaveClicked()"
+    ></p-button>
+  </div>
+  <div class="p-toolbar-group-end">
+    <p-button
+      *ngIf="showDelete"
+      label="Delete"
+      icon="pi pi-trash"
+      styleClass="p-button-danger"
+      class="mr-2"
+      (onClick)="onDeleteClicked()"
+    ></p-button>
+  </div>
+</p-toolbar>

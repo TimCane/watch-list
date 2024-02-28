@@ -1,5 +1,5 @@
-﻿using WatchList.Core.Repositories;
-using WatchList.Editor.Entities;
+﻿using WatchList.Core.Entities.Editor;
+using WatchList.Core.Repositories;
 
 namespace WatchList.Editor.Repositories.Interfaces
 {

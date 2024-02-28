@@ -1,17 +1,18 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
+import { ActionBarModule } from '../../components/action-bar/action-bar.module';
+import { GenreDetailEditFormModule } from './genre-detail-edit-form/genre-detail-edit-form.module';
 import { GenreDetailRoutingModule } from './genre-detail-routing.module';
 import { GenreDetailComponent } from './genre-detail.component';
 
-
 @NgModule({
-  declarations: [
-    GenreDetailComponent
-  ],
+  declarations: [GenreDetailComponent],
   imports: [
     CommonModule,
-    GenreDetailRoutingModule
-  ]
+    GenreDetailRoutingModule,
+    ActionBarModule,
+    GenreDetailEditFormModule,
+  ],
 })
-export class GenreDetailModule { }
+export class GenreDetailModule {}

@@ -16,7 +16,7 @@ import { Menu } from 'primeng/menu';
 })
 export class TopBarComponent {
   @ViewChild(Menu, { static: false }) menu!: Menu;
-  @Output() onSidebarToggled = new EventEmitter<void>();
+  @Output() onSidebarToggle = new EventEmitter<void>();
   @Input() user: User | null = null;
 
   get avatarBgColour() {
@@ -66,7 +66,7 @@ export class TopBarComponent {
   }
 
   toggleSidebar() {
-    this.onSidebarToggled.emit();
+    this.onSidebarToggle.emit();
   }
 
   onProfileMenu(event: any) {

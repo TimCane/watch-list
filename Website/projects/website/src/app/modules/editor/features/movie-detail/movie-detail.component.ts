@@ -5,4 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './movie-detail.component.html',
   styleUrls: ['./movie-detail.component.scss'],
 })
-export class MovieDetailComponent {}
+export class MovieDetailComponent {
+  onSave() {}
+  onDelete() {}
+}

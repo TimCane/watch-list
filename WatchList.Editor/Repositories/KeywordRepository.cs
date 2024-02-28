@@ -1,13 +1,14 @@
-﻿using WatchList.Core.Repositories;
-using WatchList.Editor.Data;
-using WatchList.Editor.Entities;
+﻿using WatchList.Core.Data;
+using WatchList.Core.Entities.Editor;
+using WatchList.Core.Repositories;
+
 using WatchList.Editor.Repositories.Interfaces;
 
 namespace WatchList.Editor.Repositories
 {
-    public class KeywordRepository : EfRepository<DbKeyword, EditorContext>, IKeywordRepository
+    public class KeywordRepository : EfRepository<DbKeyword, DatabaseContext>, IKeywordRepository
     {
-        public KeywordRepository(EditorContext context) : base(context)
+        public KeywordRepository(DatabaseContext context) : base(context)
         {
         }
     }

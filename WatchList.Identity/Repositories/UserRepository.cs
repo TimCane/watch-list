@@ -1,13 +1,14 @@
-﻿using WatchList.Core.Repositories;
-using WatchList.Identity.Data;
-using WatchList.Identity.Entities;
+﻿using WatchList.Core.Data;
+using WatchList.Core.Entities.Identity;
+using WatchList.Core.Repositories;
+
 using WatchList.Identity.Repositories.Interfaces;
 
 namespace WatchList.Identity.Repositories
 {
-    public class UserRepository : EfRepository<DbUser, IdentityContext>, IUserRepository
+    public class UserRepository : EfRepository<DbUser, DatabaseContext>, IUserRepository
     {
-        public UserRepository(IdentityContext context) : base(context)
+        public UserRepository(DatabaseContext context) : base(context)
         {
         }
 

@@ -1,0 +1,69 @@
+<p-card styleClass="p-4">
+    <div class="m-0">
+      <form
+        [formGroup]="editForm"
+        #form="ngForm"
+        class="formgrid grid"
+      >
+        <div class="col-12 md:col-6 formgrid grid">
+          <div class="flex flex-column gap-2 field col-12">
+            <label for="name">Name</label>
+  
+            <input pInputText id="name" formControlName="name" />
+            <shared-input-error
+              [form]="form"
+              [control]="name"
+            ></shared-input-error>
+          </div>
+        </div>
+  
+        <div class="col-12 md:col-6 formgrid grid">
+          <div class="flex flex-column gap-2 field col-12 xl:col-6">
+            <label for="createdOn">Created On</label>
+            <p-calendar
+              styleClass="w-full"
+              class="w-full"
+              id="createdOn"
+              formControlName="createdOn"
+              [showIcon]="true"
+            ></p-calendar>
+            <shared-input-error
+              [form]="form"
+              [control]="createdOn"
+            ></shared-input-error>
+          </div>
+          <div class="flex flex-column gap-2 field col-12 xl:col-6">
+            <label for="createdBy">Created By</label>
+            <input pInputText id="createdBy" formControlName="createdBy" />
+            <shared-input-error
+              [form]="form"
+              [control]="createdBy"
+            ></shared-input-error>
+          </div>
+          <div class="flex flex-column gap-2 field col-12 xl:col-6">
+            <label for="modifiedOn">Modified On</label>
+            <p-calendar
+              styleClass="w-full"
+              class="w-full"
+              id="modifiedOn"
+              formControlName="modifiedOn"
+              [showIcon]="true"
+            ></p-calendar>
+            <shared-input-error
+              [form]="form"
+              [control]="modifiedOn"
+            ></shared-input-error>
+          </div>
+          <div class="flex flex-column gap-2 field col-12 xl:col-6">
+            <label for="modifiedBy">Modified By</label>
+            <input pInputText id="modifiedBy" formControlName="modifiedBy" />
+            <shared-input-error
+              [form]="form"
+              [control]="modifiedBy"
+            ></shared-input-error>
+          </div>
+        </div>
+      </form>
+    </div>
+  </p-card>
+  

@@ -1,8 +1,7 @@
-﻿using System.Security.Claims;
-using AutoMapper;
-using WatchList.Core.Data.Repositories.Interfaces;
+﻿using AutoMapper;
 using WatchList.Core.Models;
-using WatchList.Core.Services.Interfaces;
+using WatchList.Identity.Repositories.Interfaces;
+using WatchList.Identity.Services.Interfaces;
 
 namespace WatchList.API.Middleware
 {

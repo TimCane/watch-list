@@ -17,7 +17,7 @@ interface RequestEmailConfirmationForm {
 }
 
 @Component({
-  selector: 'app-request-email-address-confirmation',
+  selector: 'authentication-request-email-address-confirmation',
   templateUrl: './request-email-address-confirmation.component.html',
   styleUrls: ['./request-email-address-confirmation.component.scss'],
 })

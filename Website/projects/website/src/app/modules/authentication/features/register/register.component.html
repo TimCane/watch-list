@@ -21,10 +21,10 @@
               <div class="flex flex-column gap-2">
                 <label for="name">Name</label>
                 <input pInputText id="name" formControlName="name" />
-                <app-input-error
+                <shared-input-error
                   [form]="form"
                   [control]="name"
-                ></app-input-error>
+                ></shared-input-error>
               </div>
               <div class="flex flex-column gap-2">
                 <label for="emailAddress">Email</label>
@@ -33,10 +33,10 @@
                   id="emailAddress"
                   formControlName="emailAddress"
                 />
-                <app-input-error
+                <shared-input-error
                   [form]="form"
                   [control]="emailAddress"
-                ></app-input-error>
+                ></shared-input-error>
               </div>
               <div class="flex flex-column gap-2">
                 <label for="password">Password</label>
@@ -62,10 +62,10 @@
                     </ul>
                   </ng-template>
                 </p-password>
-                <app-input-error
+                <shared-input-error
                   [form]="form"
                   [control]="password"
-                ></app-input-error>
+                ></shared-input-error>
               </div>
               <div class="flex flex-column gap-2">
                 <label for="password">Confirm password</label>
@@ -77,10 +77,10 @@
                   styleClass="w-full"
                   inputStyleClass="w-full"
                 />
-                <app-input-error
+                <shared-input-error
                   [form]="form"
                   [control]="confirmPassword"
-                ></app-input-error>
+                ></shared-input-error>
                 <div
                   *ngIf="
     form.errors?.['passwordMismatch'] &&

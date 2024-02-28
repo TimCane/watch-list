@@ -1,0 +1,8 @@
+:host ::ng-deep .p-panelmenu .p-panelmenu-header > a {
+    background: none;
+    border-color: transparent;
+
+    &.p-menuitem-link-active{
+        color: var(--primary-color);
+    }
+}

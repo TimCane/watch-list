@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { AbstractControl, FormGroupDirective } from '@angular/forms';
 
 @Component({
-  selector: 'app-input-error',
+  selector: 'shared-input-error',
   templateUrl: './input-error.component.html',
   styleUrls: ['./input-error.component.scss'],
 })

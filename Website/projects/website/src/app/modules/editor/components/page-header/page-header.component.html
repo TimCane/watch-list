@@ -1,0 +1,22 @@
+<div
+  *ngIf="{
+breadcrumb:breadcrumb$ | async,
+home:home$ | async,
+pageName:pageName$ | async
+} as state"
+>
+  <p-breadcrumb
+    *ngIf="state.breadcrumb && state.home"
+    class="max-w-full"
+    [model]="state.breadcrumb"
+    [home]="state.home"
+    styleClass="surface-ground border-none pl-0"
+  ></p-breadcrumb>
+  <div class="flex flex-row mb-4">
+    <div *ngIf="state.pageName">
+      <h1 class="text-xl font-semibold sm:text-2xl mt-0">
+        {{ state.pageName }}
+      </h1>
+    </div>
+  </div>
+</div>

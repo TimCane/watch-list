@@ -1,0 +1,16 @@
+<editor-top-bar (onSidebarToggled)="onSidebarToggled()" [user]="user$ | async"></editor-top-bar>
+<div class="flex pt-8">
+  <editor-side-bar
+    [toggle]="sidebarToggle"
+    (onSidebarToggled)="onSidebarToggled()"
+  ></editor-side-bar>
+  <main class="relative w-full h-full flex">
+    <div class="block lg:w-18rem spacer"></div>
+    <div class="p-4 flex-grow-1">
+      <editor-page-header />
+      <div>
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </main>
+</div>

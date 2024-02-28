@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Responses\Interfaces\" />
+    <Folder Include="Enums\Editor\" />
   </ItemGroup>
 
 </Project>

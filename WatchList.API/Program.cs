@@ -3,20 +3,32 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WatchList.API.Middleware;
-using WatchList.Core.Access;
-using WatchList.Core.Access.Interfaces;
-using WatchList.Core.Data;
-using WatchList.Core.Data.Entities;
-using WatchList.Core.Data.Entities.Enums;
-using WatchList.Core.Data.Repositories;
-using WatchList.Core.Data.Repositories.Interfaces;
 using WatchList.Core.Models;
+using WatchList.Core.Repositories;
 using WatchList.Core.Services;
 using WatchList.Core.Services.Interfaces;
 using WatchList.Core.Swagger;
+using WatchList.Identity.Access;
+using WatchList.Identity.Access.Interfaces;
+
+using WatchList.Identity.Repositories;
+using WatchList.Identity.Repositories.Interfaces;
+using WatchList.Identity.Services;
+using WatchList.Identity.Services.Interfaces;
+using WatchList.Editor.Access;
+using WatchList.Editor.Access.Interfaces;
+
+using WatchList.Editor.Repositories;
+using WatchList.Editor.Repositories.Interfaces;
+using WatchList.Core.Entities.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage;
+using WatchList.Core.Data;
+using WatchList.Core.Entities.Identity;
+using WatchList.Core.Entities.Identity.Enums;
 
 const string corsOriginsKey = "CORS 4 WEBSITE";
 var builder = WebApplication.CreateBuilder(args);
@@ -38,12 +50,29 @@ void ConfigureServices()
     services.AddTransient<ITokenService, TokenService>();
     services.AddTransient<IEmailService, EmailService>();
 
-    services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
+    services.AddScoped(typeof(IAsyncRepository<IIdEntity>), typeof(EfRepository<IIdEntity,DatabaseContext>));
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<IUserPromptRepository, UserPromptRepository>();
     services.AddScoped<IUserTokenRepository, UserTokenRepository>();
 
+    services.AddScoped<ICollectionRepository, CollectionRepository>();
+    services.AddScoped<IGenreRepository, GenreRepository>();
+    services.AddScoped<ICreditRepository, CreditRepository>();
+    services.AddScoped<IKeywordRepository, KeywordRepository>();
+    services.AddScoped<ILanguageRepository, LanguageRepository>();
+    services.AddScoped<IProductionCompanyRepository, ProductionCompanyRepository>();
+    services.AddScoped<IProductionCountryRepository, ProductionCountryRepository>();
+    services.AddScoped<IMovieRepository, MovieRepository>();
+
     services.AddScoped<IUsers, Users>();
+    services.AddScoped<ICollections, Collections>();
+    services.AddScoped<IGenres, Genres>();
+    services.AddScoped<ICredits, Credits>();
+    services.AddScoped<IKeywords, Keywords>();
+    services.AddScoped<ILanguages, Languages>();
+    services.AddScoped<IProductionCompanies, ProductionCompanies>();
+    services.AddScoped<IProductionCountries, ProductionCountries>();
+    services.AddScoped<IMovies, Movies>();
 
     services.AddCors(options =>
     {
@@ -56,6 +85,10 @@ void ConfigureServices()
             });
     });
 
+    services.AddHttpContextAccessor();
+
+    services.AddDbContext<DatabaseContext>(options =>
+        options.UseSqlServer(configuration.GetConnectionString("Database")));
     services.AddDbContext<DatabaseContext>(options =>
         options.UseSqlServer(configuration.GetConnectionString("Database")));
 
@@ -135,27 +168,65 @@ void ConfigureApp()
 {
     var app = builder.Build();
 
-    using (var scope =
-           ((IApplicationBuilder)app).ApplicationServices.CreateScope())
-    using (var context = scope.ServiceProvider.GetService<DatabaseContext>())
+    if (true)
     {
-        context?.Database.EnsureDeleted();
-        context?.Database.EnsureCreated();
-
-
-        context?.Users.Add(new DbUser
+        using (var scope =
+       ((IApplicationBuilder)app).ApplicationServices.CreateScope())
         {
-            Id = new Guid("4081aaed-9ac8-4a3b-9fda-08da53098d50"),
-            EmailAddress = "tim@watch-list.com",
-            Name = "Tim",
-            PasswordAttempts = 0,
-            Password = "6LaWQkPDI1473yabhnmI7+Wmm4PZF/XVoQ2AGKo07NlVv7Zy4tMcqeVbg86z4VCtbpLGBscyjuZo53kHivnck/DhbfTux1CozF+mjFlHxeibrD1NWabyToqGEaKfPSRzPgW95u6fC99pXOVkvE9bauI676yYkWlh6GxbzHDjJ/KjqOjV+TvmWp2W/zHwz7BasDQ/QbzSWX2eGmaZR6x3U70Xycbs33TNE8xqsx2gbCx8pt4z931nsjXAh5FgO4/ZYWwEeq+xCMMGWX18w8TDGA9Brpk3g44B3R8mdHiTbKNuyuvpTu2bnYyxu2zLbmBEIIXwk564jyGnlzU0bmidig==",
-            PasswordSalt = "Ut0cFgpT1f7VZn75PlLIeut05KBKRsVq3RUACSgnkZxq2HTTgZc36a9q5UzaKjMYWmCM7Yzjtc6s5lZz+7IRmHfG1I2wJuItW7U70p4rxBfF/1sopJXrf2gAnY98DXPxDyZEpg3pKq+JJ/NCO00BPHEEBC0y8ITPLP/jBXsGyKk=",
-            Status = DbUserStatusTypeEnum.Active,
-        });
+            using (var context = scope.ServiceProvider.GetService<DatabaseContext>())
+            {
+                /*
+                context?.Database.EnsureDeleted();
+                context?.Database.EnsureCreated();
 
-        context?.SaveChanges();
+                context?.SaveChanges();
+                */
+
+                if (!context.Users.Any())
+                {
+                    context?.Users.Add(new DbUser
+                    {
+                        Id = new Guid("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"),
+                        EmailAddress = "system",
+                        Name = "SYSTEM",
+                        PasswordAttempts = 0,
+                        IsAdmin = true,
+                        Password = "6LaWQkPDI1473yabhnmI7+Wmm4PZF/XVoQ2AGKo07NlVv7Zy4tMcqeVbg86z4VCtbpLGBscyjuZo53kHivnck/DhbfTux1CozF+mjFlHxeibrD1NWabyToqGEaKfPSRzPgW95u6fC99pXOVkvE9bauI676yYkWlh6GxbzHDjJ/KjqOjV+TvmWp2W/zHwz7BasDQ/QbzSWX2eGmaZR6x3U70Xycbs33TNE8xqsx2gbCx8pt4z931nsjXAh5FgO4/ZYWwEeq+xCMMGWX18w8TDGA9Brpk3g44B3R8mdHiTbKNuyuvpTu2bnYyxu2zLbmBEIIXwk564jyGnlzU0bmidig==",
+                        PasswordSalt = "Ut0cFgpT1f7VZn75PlLIeut05KBKRsVq3RUACSgnkZxq2HTTgZc36a9q5UzaKjMYWmCM7Yzjtc6s5lZz+7IRmHfG1I2wJuItW7U70p4rxBfF/1sopJXrf2gAnY98DXPxDyZEpg3pKq+JJ/NCO00BPHEEBC0y8ITPLP/jBXsGyKk=",
+                        Status = DbUserStatusTypeEnum.Locked,
+                    });
+
+                    context?.Users.Add(new DbUser
+                    {
+                        Id = new Guid("4081aaed-9ac8-4a3b-9fda-08da53098d50"),
+                        EmailAddress = "admin@watch-list.com",
+                        Name = "Admin",
+                        PasswordAttempts = 0,
+                        IsAdmin = true,
+                        Password = "6LaWQkPDI1473yabhnmI7+Wmm4PZF/XVoQ2AGKo07NlVv7Zy4tMcqeVbg86z4VCtbpLGBscyjuZo53kHivnck/DhbfTux1CozF+mjFlHxeibrD1NWabyToqGEaKfPSRzPgW95u6fC99pXOVkvE9bauI676yYkWlh6GxbzHDjJ/KjqOjV+TvmWp2W/zHwz7BasDQ/QbzSWX2eGmaZR6x3U70Xycbs33TNE8xqsx2gbCx8pt4z931nsjXAh5FgO4/ZYWwEeq+xCMMGWX18w8TDGA9Brpk3g44B3R8mdHiTbKNuyuvpTu2bnYyxu2zLbmBEIIXwk564jyGnlzU0bmidig==",
+                        PasswordSalt = "Ut0cFgpT1f7VZn75PlLIeut05KBKRsVq3RUACSgnkZxq2HTTgZc36a9q5UzaKjMYWmCM7Yzjtc6s5lZz+7IRmHfG1I2wJuItW7U70p4rxBfF/1sopJXrf2gAnY98DXPxDyZEpg3pKq+JJ/NCO00BPHEEBC0y8ITPLP/jBXsGyKk=",
+                        Status = DbUserStatusTypeEnum.Active,
+                    });
+
+                    context?.Users.Add(new DbUser
+                    {
+                        Id = new Guid("5f839195-8126-4a93-9a0f-0ba40866cdf8"),
+                        EmailAddress = "user@watch-list.com",
+                        Name = "User",
+                        PasswordAttempts = 0,
+                        IsAdmin = false,
+                        Password = "6LaWQkPDI1473yabhnmI7+Wmm4PZF/XVoQ2AGKo07NlVv7Zy4tMcqeVbg86z4VCtbpLGBscyjuZo53kHivnck/DhbfTux1CozF+mjFlHxeibrD1NWabyToqGEaKfPSRzPgW95u6fC99pXOVkvE9bauI676yYkWlh6GxbzHDjJ/KjqOjV+TvmWp2W/zHwz7BasDQ/QbzSWX2eGmaZR6x3U70Xycbs33TNE8xqsx2gbCx8pt4z931nsjXAh5FgO4/ZYWwEeq+xCMMGWX18w8TDGA9Brpk3g44B3R8mdHiTbKNuyuvpTu2bnYyxu2zLbmBEIIXwk564jyGnlzU0bmidig==",
+                        PasswordSalt = "Ut0cFgpT1f7VZn75PlLIeut05KBKRsVq3RUACSgnkZxq2HTTgZc36a9q5UzaKjMYWmCM7Yzjtc6s5lZz+7IRmHfG1I2wJuItW7U70p4rxBfF/1sopJXrf2gAnY98DXPxDyZEpg3pKq+JJ/NCO00BPHEEBC0y8ITPLP/jBXsGyKk=",
+                        Status = DbUserStatusTypeEnum.Active,
+                    });
+
+                    context?.SaveChanges();
+                }
+            }
+        }
     }
+
+
 
 
     if (app.Environment.IsDevelopment())
